@@ -1,0 +1,17 @@
+# SDN
+ryu
+
+# AI
+torch
+numpy
+pandas
+scikit-learn
+
+# Visualization
+matplotlib
+
+# Networking
+scapy
+
+# Utilities
+jupyter
