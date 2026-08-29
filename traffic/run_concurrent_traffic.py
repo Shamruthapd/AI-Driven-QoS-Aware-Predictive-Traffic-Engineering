@@ -91,7 +91,7 @@ def member1_iperf(net, args):
         )
 
     output = h1.cmd(command)
-    log_file = RESULTS_DIR / "concurrent_iperf_%s.log" % datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = RESULTS_DIR / f"concurrent_iperf_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
     log_file.write_text(output, encoding="utf-8")
     print("[Member 1] iPerf3 completed -> %s" % log_file)
     print(output)
@@ -106,14 +106,14 @@ def member3_scapy(net, args):
 
     server_log = RESULTS_DIR / ("concurrent_scapy_server_%s.log" % run_id)
     server_cmd = (
-        "python3 '%s' --mode server --bind-ip 0.0.0.0 "
+        "python3 '%s' server --bind-ip 0.0.0.0 "
         "--port %d --total-duration %s > '%s' 2>&1 &"
     ) % (SCAPY_SCRIPT, SCAPY_PORT, args.duration, server_log)
     h4.cmd(server_cmd)
     time.sleep(2)
 
     client_cmd = (
-        "python3 '%s' --mode client --server-ip %s --port %d "
+        "python3 '%s' client --server-ip %s --port %d "
         "--total-duration %s --burst-duration 2 --idle-duration 3 "
         "--burst-rate 500 --payload-size 128 "
         "--anomaly-start %s --anomaly-duration %s --anomaly-rate 4000"

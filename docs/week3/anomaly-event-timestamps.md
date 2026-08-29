@@ -29,4 +29,11 @@ Only entries under the section below are parsed by the processing script.
 
 ## Recorded Events
 
-<!-- Events appended below by traffic/scapy_iot_traffic.py -->
+<!-- Events appended below by traffic/scapy_iot_traffic.py -->- event_id: anomaly-20260829_220930
+- anomaly_start: 2026-08-29T22:09:47.700475+00:00
+- anomaly_end: 2026-08-29T22:09:57.700475+00:00
+
+- event_id: anomaly-20260829_221755
+- anomaly_start: 2026-08-29T22:18:13.092432+00:00
+- anomaly_end: 2026-08-29T22:18:23.092432+00:00
+
