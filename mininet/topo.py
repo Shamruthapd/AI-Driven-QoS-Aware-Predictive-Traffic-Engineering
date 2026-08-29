@@ -8,9 +8,12 @@ from mininet.link import TCLink
 class FatTreeEdgeTopo(Topo):
     def build(self):
         # 1. Add Switches
-        s1 = self.addSwitch('s1', cls=OVSKernelSwitch) # Edge Switch 1
-        s2 = self.addSwitch('s2', cls=OVSKernelSwitch) # Edge Switch 2
-        s3 = self.addSwitch('s3', cls=OVSKernelSwitch) # Core Switch
+        # STP is enabled on every bridge: the redundant s1-s2 backup link
+        # creates a physical L2 loop, and STP keeps the tree loop-free so the
+        # controller's broadcast/flood learning converges (Week 2 fix).
+        s1 = self.addSwitch('s1', cls=OVSKernelSwitch, stp=True) # Edge Switch 1
+        s2 = self.addSwitch('s2', cls=OVSKernelSwitch, stp=True) # Edge Switch 2
+        s3 = self.addSwitch('s3', cls=OVSKernelSwitch, stp=True) # Core Switch
 
         # 2. Add Hosts (2 per Edge Switch)
         h1 = self.addHost('h1', ip='10.0.0.1/24', mac='00:00:00:00:00:01')
@@ -37,8 +40,10 @@ if __name__ == '__main__':
     setLogLevel('info')
     topo = FatTreeEdgeTopo()
     
-    # PRODUCTION MODE: Connects to Member 1's Ryu controller at 127.0.0.1:6653
-    net = Mininet(topo=topo, controller=lambda name: RemoteController(name, ip='127.0.0.1', port=6653), switch=OVSKernelSwitch, link=TCLink)
+    # PRODUCTION MODE: Connects to Member 1's OS-Ken controller.
+    # Port 6633 matches scripts/run_controller.py, traffic/run_iperf3_experiment.py
+    # and docs/week2/week3 (OS-Ken ofp_handler default OpenFlow listen port).
+    net = Mininet(topo=topo, controller=lambda name: RemoteController(name, ip='127.0.0.1', port=6633), switch=OVSKernelSwitch, link=TCLink)
 
     net.start()
     print("*** Running CLI for verification")

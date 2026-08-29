@@ -167,6 +167,25 @@ class AIQoSSDNController(app_manager.OSKenApp):
                 dst
             )
 
+        # -------------------------------------------------------------------
+        # Same-port forwarding guard (fixes the "Same-Port Forwarding Bug").
+        #
+        # A frame whose learned destination sits on the very same port it
+        # arrived on is a loop (e.g. a flooded frame that bounced back over
+        # the redundant s1-s2 backup link).  Drop-and-ignore it: we must
+        # never install a Flow-Mod, nor emit a Packet-Out, that forwards the
+        # frame back out of `in_port` -- doing so would install an invalid
+        # self-loop flow entry and destabilise the MAC/FIB table.
+        # -------------------------------------------------------------------
+        if out_port == in_port:
+            self.logger.info(
+                "Loop packet dropped | SRC=%s | DST=%s | IN_PORT=%s",
+                src,
+                dst,
+                in_port
+            )
+            return
+
         actions = [
             parser.OFPActionOutput(out_port)
         ]

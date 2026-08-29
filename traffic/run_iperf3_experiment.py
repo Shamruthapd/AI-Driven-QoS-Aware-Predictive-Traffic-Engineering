@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
 
+"""
+Member 1 -- repeatable iPerf3 baseline traffic experiments (Week 3).
+
+Standalone usage creates its own single-switch topology (h1 <-> h2,
+controller 127.0.0.1:6633) and uses iPerf3 UDP/TCP port 5201.
+
+For CONCURRENT experiments with Member 3's Scapy bursty-IoT generator
+use traffic/run_concurrent_traffic.py, which runs both generators inside
+ONE Mininet testbed with a disjoint allocation matrix:
+
+    iPerf3 (Member 1): h1 (10.0.0.1) -> h2 (10.0.0.2), L4 port 5201
+    Scapy  (Member 3): h3 (10.0.0.3) -> h4 (10.0.0.4), L4 port 5202
+"""
+
 import argparse
 from datetime import datetime
 from pathlib import Path
@@ -42,14 +56,20 @@ def run_experiment(protocol, duration, bitrate):
         h1 = net.get("h1")
         h2 = net.get("h2")
 
-        h2.cmd("iperf3 -s -D")
+        iperf_port = 5201  # iPerf3 default; Member 3 Scapy IoT uses 5202
+
+        h2.cmd(f"iperf3 -s -D -p {iperf_port}")
 
         if protocol == "tcp":
-            command = f"iperf3 -c {h2.IP()} -t {duration}"
+            command = (
+                f"iperf3 -c {h2.IP()} "
+                f"-p {iperf_port} -t {duration}"
+            )
 
         else:
             command = (
                 f"iperf3 -c {h2.IP()} "
+                f"-p {iperf_port} "
                 f"-u -b {bitrate} -t {duration}"
             )
 
