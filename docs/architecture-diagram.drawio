@@ -1,0 +1,81 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="FDmzBMMt5yUqJ-GPF3B2">
+    <mxGraphModel dx="1437" dy="2090" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="BnKrQUG--yvLkG4rg09--1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;APPLICATION / AI PLANE&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;• Traffic Prediction&lt;/div&gt;&lt;div&gt;• QoS Intelligence&lt;/div&gt;&lt;div&gt;• Traffic Engineering&lt;/div&gt;&lt;div&gt;• Self-Healing&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="250" x="20" y="-160" as="geometry" />
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;CONTROL PLANE&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;OS-Ken 4.2.1 SDN Controller&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;• OpenFlow 1.3&lt;/div&gt;&lt;div&gt;• MAC Learning&lt;/div&gt;&lt;div&gt;• Flow Management&lt;/div&gt;&lt;div&gt;• Network Monitoring&lt;/div&gt;&lt;div&gt;• Telemetry Collection&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="235" x="308" y="-430" as="geometry" />
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;DATA PLANE&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Mininet + Open vSwitch&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;h1 ───── s1 ───── h2&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;• Packet Forwarding&lt;/div&gt;&lt;div&gt;• Flow Tables&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="210" x="617.5" y="-160" as="geometry" />
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;TELEMETRY &amp;amp; DATA PIPELINE&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;OpenFlow Statistics&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; ↓&lt;/div&gt;&lt;div&gt;Raw CSV&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; ↓&lt;/div&gt;&lt;div&gt;Validation&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; ↓&lt;/div&gt;&lt;div&gt;QoS Features&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; ↓&lt;/div&gt;&lt;div&gt;AI Model Input&lt;/div&gt;" vertex="1">
+          <mxGeometry height="200" width="210" x="320" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=0;" value="&lt;div&gt;Current verified prototype: h1 — s1 — h2&lt;/div&gt;&lt;div&gt;Proposed extensions: AI prediction, QoS-aware traffic engineering,&lt;/div&gt;&lt;div&gt;and self-healing mechanisms&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="235" x="308" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--16" edge="1" parent="1" source="BnKrQUG--yvLkG4rg09--4" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="BnKrQUG--yvLkG4rg09--1" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points" />
+            <mxPoint x="100" y="130" as="sourcePoint" />
+            <mxPoint x="160" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--25" connectable="0" parent="BnKrQUG--yvLkG4rg09--16" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;Measured network state&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1798" y="-1" as="geometry">
+            <mxPoint x="-39" y="-34" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--17" edge="1" parent="1" source="BnKrQUG--yvLkG4rg09--1" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=12;" target="BnKrQUG--yvLkG4rg09--2" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="370" y="-40" as="sourcePoint" />
+            <mxPoint x="420" y="-90" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--20" connectable="0" parent="BnKrQUG--yvLkG4rg09--17" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;Network intelligence / Decisions&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0483" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--21" edge="1" parent="1" source="BnKrQUG--yvLkG4rg09--2" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="BnKrQUG--yvLkG4rg09--3" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="370" y="-40" as="sourcePoint" />
+            <mxPoint x="420" y="-90" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--22" connectable="0" parent="BnKrQUG--yvLkG4rg09--21" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;OpenFlow 1.3&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0875" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--23" edge="1" parent="1" source="BnKrQUG--yvLkG4rg09--3" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="BnKrQUG--yvLkG4rg09--4" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="560" y="90" as="sourcePoint" />
+            <mxPoint x="610" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--24" connectable="0" parent="BnKrQUG--yvLkG4rg09--23" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;OpenFlow Statistics&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2515" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--26" edge="1" parent="1" source="BnKrQUG--yvLkG4rg09--2" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="BnKrQUG--yvLkG4rg09--4" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="370" y="-90" as="sourcePoint" />
+            <mxPoint x="420" y="-140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BnKrQUG--yvLkG4rg09--27" connectable="0" parent="BnKrQUG--yvLkG4rg09--26" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;Statistics&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0526" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -31,7 +31,7 @@ The project consists of four major components:
 - Network Links
 
 ### 2. Control Plane
-- Ryu SDN Controller
+- OS-Ken 4.2.1 SDN Controller
 - OpenFlow Protocol
 
 ### 3. AI Layer
@@ -52,7 +52,7 @@ The project consists of four major components:
 |------------|---------|
 | Python | Programming Language |
 | Mininet | Network Emulation |
-| Ryu Controller | SDN Controller |
+| OS-Ken 4.2.1 | SDN Controller |
 | OpenFlow 1.3 | Controller-Switch Communication |
 | Open vSwitch (OVS) | Virtual Switch |
 | PyTorch | AI Model Development |
