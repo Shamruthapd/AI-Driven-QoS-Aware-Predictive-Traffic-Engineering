@@ -11,6 +11,7 @@ torch
 numpy
 pandas
 scikit-learn
+joblib
 
 # Visualization
 matplotlib

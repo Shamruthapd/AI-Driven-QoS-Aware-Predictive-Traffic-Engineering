@@ -32,7 +32,7 @@ class FatTreeEdgeTopo(Topo):
         self.addLink(s2, s3, bw=100)
 
         # 5. REDUNDANT BACKUP LINK (Edge-to-Edge path for Week 9 Fast-Failover)
-        self.addLink(s1, s2, bw=100)
+        #self.addLink(s1, s2, bw=100)
 
 topos = { 'fattreeedge': ( lambda: FatTreeEdgeTopo() ) }
 
