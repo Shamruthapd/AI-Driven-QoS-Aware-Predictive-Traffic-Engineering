@@ -1,4 +1,3 @@
-
 from mininet.topo import Topo
 from mininet.net import Mininet
 from mininet.node import RemoteController, OVSKernelSwitch
@@ -12,12 +11,31 @@ class FatTreeEdgeTopo(Topo):
 
     def build(self):
 
-        # Add switches
-        s1 = self.addSwitch('s1', cls=OVSKernelSwitch)
-        s2 = self.addSwitch('s2', cls=OVSKernelSwitch)
-        s3 = self.addSwitch('s3', cls=OVSKernelSwitch)
+        # ---------------------------------------------------------------
+        # 1. Add switches
+        # STP prevents Layer-2 loops caused by the redundant s1-s2 link.
+        # ---------------------------------------------------------------
+        s1 = self.addSwitch(
+            's1',
+            cls=OVSKernelSwitch,
+            stp=True
+        )
 
-        # Add hosts
+        s2 = self.addSwitch(
+            's2',
+            cls=OVSKernelSwitch,
+            stp=True
+        )
+
+        s3 = self.addSwitch(
+            's3',
+            cls=OVSKernelSwitch,
+            stp=True
+        )
+
+        # ---------------------------------------------------------------
+        # 2. Add hosts
+        # ---------------------------------------------------------------
         h1 = self.addHost(
             'h1',
             ip='10.0.0.1/24',
@@ -42,17 +60,27 @@ class FatTreeEdgeTopo(Topo):
             mac='00:00:00:00:00:04'
         )
 
-        # Host-to-switch links
+        # ---------------------------------------------------------------
+        # 3. Host-to-switch links
+        # 10 Mbps edge links
+        # ---------------------------------------------------------------
         self.addLink(h1, s1, bw=10)
         self.addLink(h2, s1, bw=10)
         self.addLink(h3, s2, bw=10)
         self.addLink(h4, s2, bw=10)
 
-        # Switch-to-switch links
+        # ---------------------------------------------------------------
+        # 4. Switch-to-switch links
+        # 100 Mbps backbone links
+        # ---------------------------------------------------------------
         self.addLink(s1, s3, bw=100)
         self.addLink(s2, s3, bw=100)
 
-        # Redundant backup link
+        # ---------------------------------------------------------------
+        # 5. Redundant backup link
+        # Used for redundancy and future fast-failover experiments.
+        # STP prevents a permanent L2 loop during normal operation.
+        # ---------------------------------------------------------------
         self.addLink(s1, s2, bw=100)
 
 
@@ -62,13 +90,15 @@ if __name__ == '__main__':
 
     parser.add_argument(
         '--controller-ip',
-        default='127.0.0.1'
+        default='127.0.0.1',
+        help='IP address of the remote OS-Ken controller'
     )
 
     parser.add_argument(
         '--controller-port',
         type=int,
-        required=True
+        required=True,
+        help='OpenFlow controller port'
     )
 
     args = parser.parse_args()
@@ -77,6 +107,10 @@ if __name__ == '__main__':
 
     topo = FatTreeEdgeTopo()
 
+    # ---------------------------------------------------------------
+    # Create Mininet without a default controller.
+    # The controller is added explicitly below.
+    # ---------------------------------------------------------------
     net = Mininet(
         topo=topo,
         controller=None,
@@ -84,6 +118,9 @@ if __name__ == '__main__':
         link=TCLink
     )
 
+    # ---------------------------------------------------------------
+    # Connect to the remote OS-Ken controller.
+    # ---------------------------------------------------------------
     controller = RemoteController(
         'c0',
         ip=args.controller_ip,
@@ -92,6 +129,9 @@ if __name__ == '__main__':
 
     net.addController(controller)
 
+    # ---------------------------------------------------------------
+    # Start network
+    # ---------------------------------------------------------------
     net.start()
 
     print("*** Running CLI for verification")

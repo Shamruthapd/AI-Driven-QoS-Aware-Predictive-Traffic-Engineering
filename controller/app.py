@@ -21,6 +21,7 @@ class AIQoSSDNController(app_manager.OSKenApp):
     - MAC learning
     - Packet-In handling
     - Dynamic flow installation
+    - Same-port forwarding protection
     """
 
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
@@ -137,8 +138,10 @@ class AIQoSSDNController(app_manager.OSKenApp):
 
         dpid = datapath.id
 
-        # Learn source MAC address.
+        # Create MAC table for this switch if necessary.
         self.mac_to_port.setdefault(dpid, {})
+
+        # Learn source MAC address.
         self.mac_to_port[dpid][src] = in_port
 
         self.logger.info(
@@ -151,28 +154,17 @@ class AIQoSSDNController(app_manager.OSKenApp):
 
         # Determine output port.
         if dst in self.mac_to_port[dpid]:
+
             out_port = self.mac_to_port[dpid][dst]
 
-            # Prevent forwarding a packet back through
-            # the same port on which it arrived.
-            if out_port == in_port:
-                self.logger.warning(
-                    "Destination learned on ingress port | "
-                    "DST=%s | IN_PORT=%s | FLOOD",
-                    dst,
-                    in_port
-                )
-
-                out_port = ofproto.OFPP_FLOOD
-
-            else:
-                self.logger.info(
-                    "Known destination | DST=%s | OUT_PORT=%s",
-                    dst,
-                    out_port
-                )
+            self.logger.info(
+                "Known destination | DST=%s | OUT_PORT=%s",
+                dst,
+                out_port
+            )
 
         else:
+
             out_port = ofproto.OFPP_FLOOD
 
             self.logger.info(
@@ -180,12 +172,30 @@ class AIQoSSDNController(app_manager.OSKenApp):
                 dst
             )
 
+        # ---------------------------------------------------------------
+        # Same-port forwarding protection.
+        #
+        # Never forward a packet back through the same port
+        # on which it arrived.
+        # ---------------------------------------------------------------
+        if out_port == in_port:
+
+            self.logger.info(
+                "Loop packet dropped | SRC=%s | DST=%s | IN_PORT=%s",
+                src,
+                dst,
+                in_port
+            )
+
+            return
+
+        # Create output action.
         actions = [
             parser.OFPActionOutput(out_port)
         ]
 
-        # Once destination is known and is not the
-        # ingress port, install a forwarding flow.
+        # Install a forwarding flow only when the destination
+        # is known.
         if out_port != ofproto.OFPP_FLOOD:
 
             match = parser.OFPMatch(
@@ -202,24 +212,29 @@ class AIQoSSDNController(app_manager.OSKenApp):
 
             self.logger.info(
                 "Forwarding flow installed | "
-                "SRC=%s | DST=%s | OUT_PORT=%s",
-                src,
+                "DPID=%s | IN_PORT=%s | DST=%s | OUT_PORT=%s",
+                dpid,
+                in_port,
                 dst,
                 out_port
             )
 
         # Send the current packet immediately.
-        data = None
-
-        if msg.buffer_id == ofproto.OFP_NO_BUFFER:
-            data = msg.data
-
         out = parser.OFPPacketOut(
             datapath=datapath,
             buffer_id=msg.buffer_id,
             in_port=in_port,
             actions=actions,
-            data=data
+            data=msg.data
         )
 
         datapath.send_msg(out)
+
+        self.logger.info(
+            "Packet-Out sent | "
+            "DPID=%s | SRC=%s | DST=%s | OUT_PORT=%s",
+            dpid,
+            src,
+            dst,
+            out_port
+        )

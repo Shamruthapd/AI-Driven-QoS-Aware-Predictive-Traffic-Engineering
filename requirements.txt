@@ -1,17 +1,23 @@
-# SDN
-ryu
+# ============================================================
+# AI-Driven QoS-Aware Predictive Traffic Engineering
+# Project Dependencies
+# ============================================================
 
-# AI
+# SDN Controller
+os-ken==4.2.1
+
+# AI / Data Processing
 torch
 numpy
 pandas
 scikit-learn
+joblib
 
 # Visualization
 matplotlib
 
-# Networking
+# Networking / Traffic Analysis
 scapy
 
-# Utilities
+# Development / Analysis
 jupyter
