@@ -212,6 +212,20 @@ def main():
         / df["interval_seconds"]
     )
 
+    # Detect extreme traffic bursts.
+    traffic_anomaly = (
+        (df["throughput_bps"] > 1e8)
+        |
+        (df["packet_rate_pps"] > 2.5e5)
+    )
+
+    # Combine timestamp-based and traffic-based labels.
+    df["is_anomalous"] = (
+        (df["is_anomalous"] == 1)
+        |
+        traffic_anomaly
+    ).astype("int64")
+
     # Packet drops observed during each interval.
     df["rx_dropped_delta"] = (
         df["rx_dropped_delta"]
