@@ -46,7 +46,6 @@ class AIQoSSDNController(app_manager.OSKenApp):
         """
         Handle a newly connected OpenFlow switch.
         """
-
         datapath = ev.msg.datapath
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
@@ -153,11 +152,22 @@ class AIQoSSDNController(app_manager.OSKenApp):
         if dst in self.mac_to_port[dpid]:
             out_port = self.mac_to_port[dpid][dst]
 
-            self.logger.info(
-                "Known destination | DST=%s | OUT_PORT=%s",
-                dst,
-                out_port
-            )
+            # Prevent forwarding a packet back through
+            # the same port on which it arrived.
+            if out_port == in_port:
+                self.logger.warning(
+                    "Destination learned on ingress port | "
+                    "DST=%s | IN_PORT=%s | FLOOD",
+                    dst,
+                    in_port
+                )
+                out_port = ofproto.OFPP_FLOOD
+            else:
+                self.logger.info(
+                    "Known destination | DST=%s | OUT_PORT=%s",
+                    dst,
+                    out_port
+                )
 
         else:
             out_port = ofproto.OFPP_FLOOD
@@ -166,11 +176,9 @@ class AIQoSSDNController(app_manager.OSKenApp):
                 "Unknown destination | DST=%s | FLOOD",
                 dst
             )
-
         actions = [
-            parser.OFPActionOutput(out_port)
+              parser.OFPActionOutput(out_port)
         ]
-
         # Once destination is known, install a flow.
         if out_port != ofproto.OFPP_FLOOD:
 
