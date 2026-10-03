@@ -1,0 +1,5 @@
+qos_state,flow_type,throughput_mbps,jitter_ms,packet_loss_pct
+OFF,Priority_UDP_Video,8.0,0.041,0.0
+OFF,Bulk_TCP_Data,12.02,0.0,0.0
+ON,Priority_UDP_Video,3.95,3.432,0.0
+ON,Bulk_TCP_Data,3.76,0.0,0.0
