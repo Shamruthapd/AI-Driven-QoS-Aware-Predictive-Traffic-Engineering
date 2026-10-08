@@ -1,38 +1,53 @@
-from pathlib import Path
+# ai-model/evaluate_lstm.py
 
+# Import required libraries.
+import os
 import numpy as np
 import pandas as pd
 import torch
+import joblib
 
-from sklearn.metrics import (
-    accuracy_score,
-    confusion_matrix,
-    f1_score,
-    precision_score,
-    recall_score,
-)
-
-from torch.utils.data import DataLoader, TensorDataset
-
+# Import the LSTM model definition.
 from lstm_model import TrafficLSTM
 
 
-# ---------------------------------------------------------
+# ============================================================
 # Configuration
-# ---------------------------------------------------------
+# ============================================================
 
-# Identify the project root directory.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Path to the validation dataset.
+VAL_FILE = "datasets/processed/val_scaled.csv"
 
-# Define dataset, model, and output paths.
-VALIDATION_FILE = BASE_DIR / "datasets" / "processed" / "val_scaled.csv"
-MODEL_FILE = BASE_DIR / "ai-model" / "checkpoints" / "lstm_model.pt"
-OUTPUT_FILE = BASE_DIR / "ai-model" / "evaluation_results.csv"
+# Path to the trained LSTM checkpoint.
+MODEL_FILE = "ai-model/checkpoints/lstm_model.pt"
 
-# Number of previous time steps used as input.
-SEQUENCE_LENGTH = 5
+# Path to the scaler used during dataset preparation.
+SCALER_FILE = "datasets/processed/scaler.pkl"
 
-# Features used by the LSTM model.
+# Output file for evaluation results.
+RESULT_FILE = "ai-model/evaluation_results.csv"
+
+# Number of previous time steps used to predict the next step.
+SEQ_LEN = 5
+
+# Number of input features used by the LSTM.
+INPUT_SIZE = 10
+
+# Threshold used to classify a prediction as anomalous.
+MSE_THRESHOLD = 5.0
+
+# Small value used to avoid division by zero while calculating MAPE.
+MAPE_EPSILON = 1e-8
+
+# Device used for evaluation.
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+# ============================================================
+# Feature Configuration
+# ============================================================
+
+# These are the exact 10 features expected by the LSTM.
 FEATURE_COLUMNS = [
     "rx_packets_delta",
     "tx_packets_delta",
@@ -46,386 +61,455 @@ FEATURE_COLUMNS = [
     "packet_rate_pps",
 ]
 
-# Select GPU if available; otherwise, use CPU.
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Main threshold used for the final anomaly prediction.
-MSE_THRESHOLD = 5
+# ============================================================
+# Helper Function: Create Sequences
+# ============================================================
 
-# Thresholds tested for comparison.
-THRESHOLDS_TO_TEST = [5, 10, 15, 20, 25, 30, 40, 50]
+def create_sequences(df, seq_len):
+    """
+    Create sliding-window sequences for LSTM evaluation.
+
+    Each sequence contains 'seq_len' previous observations,
+    and the target is the next observation.
+    """
+
+    X = []
+    y = []
+    labels = []
+
+    # Group data by device and port so that sequences
+    # are not created across different network interfaces.
+    grouped = df.groupby(["dpid", "port"])
+
+    for _, group in grouped:
+
+        # Sort each group chronologically.
+        group = group.sort_values("timestamp")
+
+        # Extract feature values.
+        values = group[FEATURE_COLUMNS].values
+
+        # Extract anomaly labels.
+        group_labels = group["is_anomalous"].values
+
+        # Create sliding-window sequences.
+        for i in range(len(values) - seq_len):
+
+            # Previous 'seq_len' observations are the input.
+            X.append(values[i:i + seq_len])
+
+            # The next observation is the prediction target.
+            y.append(values[i + seq_len])
+
+            # Store the anomaly label of the target observation.
+            labels.append(group_labels[i + seq_len])
+
+    return (
+        np.array(X, dtype=np.float32),
+        np.array(y, dtype=np.float32),
+        np.array(labels)
+    )
 
 
-# ---------------------------------------------------------
-# Load validation data
-# ---------------------------------------------------------
+# ============================================================
+# Load Validation Dataset
+# ============================================================
 
-# Read the scaled validation dataset.
-df = pd.read_csv(VALIDATION_FILE)
+print("=" * 70)
+print("LSTM VALIDATION")
+print("=" * 70)
 
-# Convert timestamps into datetime values.
-df["timestamp"] = pd.to_datetime(
-    df["timestamp"],
-    errors="coerce",
-)
+print(f"Using device: {DEVICE}")
 
-# Identify columns required for evaluation.
+# Check whether the validation file exists.
+if not os.path.exists(VAL_FILE):
+    raise FileNotFoundError(f"Validation file not found: {VAL_FILE}")
+
+# Load validation data.
+df = pd.read_csv(VAL_FILE)
+
+print(f"Validation rows before cleaning: {len(df)}")
+
+
+# ============================================================
+# Data Cleaning
+# ============================================================
+
+# Remove rows containing missing values in the required columns.
 required_columns = FEATURE_COLUMNS + [
     "timestamp",
     "dpid",
     "port",
-    "is_anomalous",
+    "is_anomalous"
 ]
 
-# Remove rows with missing required values.
-df = df.dropna(subset=required_columns)
+df = df.dropna(subset=required_columns).copy()
 
-# Sort telemetry data chronologically for each switch and port.
-df = df.sort_values(
-    by=["dpid", "port", "timestamp"]
-).reset_index(drop=True)
+print(f"Validation rows after cleaning: {len(df)}")
 
 
-# ---------------------------------------------------------
-# Create validation sequences
-# ---------------------------------------------------------
+# ============================================================
+# Create Validation Sequences
+# ============================================================
 
-# Store input sequences, target values, and sample metadata.
-sequences = []
-targets = []
-metadata = []
+# Create sliding-window input sequences and targets.
+X, y, labels = create_sequences(df, SEQ_LEN)
 
-# Group data by datapath ID and port.
-grouped = df.groupby(["dpid", "port"])
-
-for (dpid, port), group in grouped:
-
-    # Sort each group by timestamp.
-    group = group.sort_values("timestamp").reset_index(drop=True)
-
-    # Extract the model features.
-    feature_values = group[FEATURE_COLUMNS].to_numpy(
-        dtype=np.float32
-    )
-
-    # Create sliding-window sequences.
-    for i in range(len(group) - SEQUENCE_LENGTH):
-
-        # Use the previous five rows as the input sequence.
-        input_sequence = feature_values[
-            i:i + SEQUENCE_LENGTH
-        ]
-
-        # Use the next row as the prediction target.
-        target_value = feature_values[
-            i + SEQUENCE_LENGTH
-        ]
-
-        # Retrieve metadata for the target row.
-        target_row = group.iloc[i + SEQUENCE_LENGTH]
-
-        # Store the input sequence and target.
-        sequences.append(input_sequence)
-        targets.append(target_value)
-
-        # Store metadata for later anomaly evaluation.
-        metadata.append({
-            "timestamp": target_row["timestamp"],
-            "dpid": dpid,
-            "port": port,
-            "is_anomalous": int(target_row["is_anomalous"]),
-        })
+print(f"Validation sequences: {len(X)}")
+print(f"Input shape: {X.shape}")
+print(f"Target shape: {y.shape}")
 
 
-# Stop if no sequences were created.
-if len(sequences) == 0:
-    raise RuntimeError("No validation sequences were generated.")
+# ============================================================
+# Load Trained Model
+# ============================================================
 
+if not os.path.exists(MODEL_FILE):
+    raise FileNotFoundError(f"Model checkpoint not found: {MODEL_FILE}")
 
-# Convert the sequences and targets into PyTorch tensors.
-X_val = torch.tensor(
-    np.array(sequences),
-    dtype=torch.float32,
-)
-
-y_val = torch.tensor(
-    np.array(targets),
-    dtype=torch.float32,
-)
-
-# Create the validation dataset and data loader.
-validation_dataset = TensorDataset(X_val, y_val)
-
-validation_loader = DataLoader(
-    validation_dataset,
-    batch_size=32,
-    shuffle=False,
-)
-
-
-# ---------------------------------------------------------
-# Load trained LSTM model
-# ---------------------------------------------------------
-
-# Load the saved model checkpoint.
+# Load the trained checkpoint.
 checkpoint = torch.load(
     MODEL_FILE,
     map_location=DEVICE,
+    weights_only=False
 )
 
-# Read the model configuration from the checkpoint.
+# Read model configuration from the checkpoint if available.
+# These fallback values keep compatibility with older checkpoints.
 model_config = checkpoint.get(
     "model_config",
     {
-        "input_size": 10,
+        "input_size": INPUT_SIZE,
         "hidden_size": 64,
         "num_layers": 2,
-        "output_size": 10,
+        "output_size": INPUT_SIZE,
         "dropout": 0.2,
-    },
+    }
 )
 
-# Create the LSTM model.
-model = TrafficLSTM(**model_config).to(DEVICE)
-
-# Load the trained weights.
-model.load_state_dict(
-    checkpoint["model_state_dict"]
+# Create the LSTM model using the saved configuration.
+model = TrafficLSTM(
+    input_size=model_config["input_size"],
+    hidden_size=model_config["hidden_size"],
+    num_layers=model_config["num_layers"],
+    output_size=model_config["output_size"],
+    dropout=model_config.get("dropout", 0.2)
 )
 
-# Set the model to evaluation mode.
+# Load trained model weights.
+model.load_state_dict(checkpoint["model_state_dict"])
+
+# Move model to CPU/GPU.
+model.to(DEVICE)
+
+# Put model into evaluation mode.
 model.eval()
 
 
-# ---------------------------------------------------------
-# Generate predictions
-# ---------------------------------------------------------
+# ============================================================
+# Run Predictions
+# ============================================================
 
-# Store predictions and actual target values from all batches.
-all_predictions = []
-all_targets = []
+# Convert input sequences into a PyTorch tensor.
+X_tensor = torch.tensor(X, dtype=torch.float32).to(DEVICE)
 
-# Disable gradients during evaluation.
+# Disable gradient calculation because this is evaluation only.
 with torch.no_grad():
 
-    # Process the validation dataset batch by batch.
-    for inputs, targets_batch in validation_loader:
+    # Generate predictions for all validation sequences.
+    predictions_tensor = model(X_tensor)
 
-        # Move data to the selected device.
-        inputs = inputs.to(DEVICE)
-        targets_batch = targets_batch.to(DEVICE)
-
-        # Generate predictions using the LSTM model.
-        predictions = model(inputs)
-
-        # Store predictions and targets on the CPU.
-        all_predictions.append(
-            predictions.cpu().numpy()
-        )
-
-        all_targets.append(
-            targets_batch.cpu().numpy()
-        )
+# Move predictions back to CPU and convert to NumPy.
+predictions = predictions_tensor.cpu().numpy()
 
 
-# Combine all batches into NumPy arrays.
-predictions_array = np.concatenate(
-    all_predictions,
-    axis=0,
+# ============================================================
+# Calculate Prediction Errors
+# ============================================================
+
+# Calculate squared error for every predicted feature.
+squared_errors = (predictions - y) ** 2
+
+# Calculate absolute error for every predicted feature.
+absolute_errors = np.abs(predictions - y)
+
+# Calculate MSE for each sequence.
+sample_mse = np.mean(squared_errors, axis=1)
+
+# Calculate overall MSE across all predictions and features.
+overall_mse = np.mean(squared_errors)
+
+# Calculate overall MAE across all predictions and features.
+# MAE represents the average absolute prediction error.
+overall_mae = np.mean(absolute_errors)
+
+# Print the main prediction-error metrics.
+print("\nPrediction Error Summary")
+print("-" * 70)
+print(f"Overall MSE: {overall_mse:.6f}")
+print(f"Overall MAE: {overall_mae:.6f}")
+
+
+# ============================================================
+# Calculate MAPE
+# ============================================================
+
+# Load the scaler used to create the scaled validation dataset.
+if not os.path.exists(SCALER_FILE):
+    raise FileNotFoundError(f"Scaler file not found: {SCALER_FILE}")
+
+scaler = joblib.load(SCALER_FILE)
+
+# Flatten the predictions and targets so that they can be
+# inverse-transformed using the same scaler.
+predictions_flat = predictions.reshape(-1, INPUT_SIZE)
+targets_flat = y.reshape(-1, INPUT_SIZE)
+
+# Convert scaled values back to their original units.
+predictions_original = scaler.inverse_transform(predictions_flat)
+targets_original = scaler.inverse_transform(targets_flat)
+
+# Only calculate percentage error where the actual value
+# is not zero or extremely close to zero.
+valid_mape_mask = np.abs(targets_original) > MAPE_EPSILON
+
+# Calculate absolute percentage errors.
+percentage_errors = (
+    np.abs(
+        (targets_original[valid_mape_mask]
+         - predictions_original[valid_mape_mask])
+        / targets_original[valid_mape_mask]
+    )
+    * 100
 )
 
-targets_array = np.concatenate(
-    all_targets,
-    axis=0,
-)
+# Calculate MAPE if there are valid non-zero targets.
+if len(percentage_errors) > 0:
+
+    # Calculate mean percentage error.
+    mape = np.mean(percentage_errors)
+
+    print("\nMAPE Evaluation")
+    print("-" * 70)
+    print(f"Non-zero target MAPE: {mape:.2f}%")
+    print(f"Values included: {len(percentage_errors)}")
+    print(f"Total target values: {targets_original.size}")
+
+else:
+
+    # Report if no valid values are available.
+    mape = np.nan
+
+    print("\nMAPE Evaluation")
+    print("-" * 70)
+    print("MAPE could not be calculated because all target values are zero.")
 
 
-# ---------------------------------------------------------
-# Calculate prediction errors
-# ---------------------------------------------------------
+# ============================================================
+# Threshold Comparison
+# ============================================================
 
-# Calculate the MSE for every validation sample.
-sample_mse = np.mean(
-    (predictions_array - targets_array) ** 2,
-    axis=1,
-)
+print("\n" + "=" * 70)
+print("Threshold Comparison")
+print("=" * 70)
 
-# Create a results DataFrame using the stored metadata.
-results = pd.DataFrame(metadata)
+# Thresholds to compare for anomaly detection.
+thresholds = [5, 10, 15, 20, 25, 30, 40, 50]
 
-# Add the MSE values to the results.
-results["mse"] = sample_mse
+# Store threshold evaluation results.
+threshold_results = []
 
+for threshold in thresholds:
 
-# ---------------------------------------------------------
-# Compare multiple MSE thresholds
-# ---------------------------------------------------------
+    # Predict anomaly when MSE exceeds the threshold.
+    predicted_anomalies = sample_mse > threshold
 
-print("\nThreshold Comparison")
-print("=" * 75)
+    # Convert actual labels into Boolean values.
+    actual_anomalies = labels.astype(bool)
 
-# Test each possible threshold.
-for threshold in THRESHOLDS_TO_TEST:
-
-    # Predict anomalies when MSE exceeds the current threshold.
-    predicted_labels = (
-        results["mse"] > threshold
-    ).astype(int)
-
-    # Calculate precision for the current threshold.
-    threshold_precision = precision_score(
-        results["is_anomalous"],
-        predicted_labels,
-        zero_division=0,
+    # Calculate confusion-matrix components.
+    true_positive = np.sum(
+        predicted_anomalies & actual_anomalies
     )
 
-    # Calculate recall for the current threshold.
-    threshold_recall = recall_score(
-        results["is_anomalous"],
-        predicted_labels,
-        zero_division=0,
+    false_positive = np.sum(
+        predicted_anomalies & ~actual_anomalies
     )
 
-    # Calculate F1-score for the current threshold.
-    threshold_f1 = f1_score(
-        results["is_anomalous"],
-        predicted_labels,
-        zero_division=0,
+    false_negative = np.sum(
+        ~predicted_anomalies & actual_anomalies
     )
 
-    # Print the metrics for comparison.
+    true_negative = np.sum(
+        ~predicted_anomalies & ~actual_anomalies
+    )
+
+    # Calculate precision.
+    precision = (
+        true_positive / (true_positive + false_positive)
+        if (true_positive + false_positive) > 0
+        else 0
+    )
+
+    # Calculate recall.
+    recall = (
+        true_positive / (true_positive + false_negative)
+        if (true_positive + false_negative) > 0
+        else 0
+    )
+
+    # Calculate F1-score.
+    f1 = (
+        2 * precision * recall / (precision + recall)
+        if (precision + recall) > 0
+        else 0
+    )
+
+    # Print threshold results.
     print(
         f"Threshold: {threshold:>2} | "
-        f"Precision: {threshold_precision:.4f} | "
-        f"Recall: {threshold_recall:.4f} | "
-        f"F1-score: {threshold_f1:.4f}"
+        f"Precision: {precision:.4f} | "
+        f"Recall: {recall:.4f} | "
+        f"F1-score: {f1:.4f}"
     )
 
-
-# ---------------------------------------------------------
-# Generate final anomaly predictions
-# ---------------------------------------------------------
-
-# Classify samples using the selected main threshold.
-results["predicted_anomaly"] = (
-    results["mse"] > MSE_THRESHOLD
-).astype(int)
+    # Store the result.
+    threshold_results.append({
+        "threshold": threshold,
+        "precision": precision,
+        "recall": recall,
+        "f1": f1
+    })
 
 
-# ---------------------------------------------------------
-# Calculate MSE statistics
-# ---------------------------------------------------------
+# ============================================================
+# Final Classification Using Selected Threshold
+# ============================================================
 
-# Calculate the overall average MSE.
-overall_mse = results["mse"].mean()
+# Use the selected threshold for the final classification.
+predicted_anomalies = sample_mse > MSE_THRESHOLD
 
-# Separate normal and anomalous samples using actual labels.
-normal_results = results[
-    results["is_anomalous"] == 0
-]
+# Convert labels to Boolean values.
+actual_anomalies = labels.astype(bool)
 
-anomalous_results = results[
-    results["is_anomalous"] == 1
-]
-
-# Calculate the average MSE for normal samples.
-normal_mse = (
-    normal_results["mse"].mean()
-    if len(normal_results) > 0
-    else float("nan")
+# Calculate confusion-matrix components.
+true_positive = np.sum(
+    predicted_anomalies & actual_anomalies
 )
 
-# Calculate the average MSE for anomalous samples.
-anomalous_mse = (
-    anomalous_results["mse"].mean()
-    if len(anomalous_results) > 0
-    else float("nan")
+true_negative = np.sum(
+    ~predicted_anomalies & ~actual_anomalies
 )
 
+false_positive = np.sum(
+    predicted_anomalies & ~actual_anomalies
+)
 
-# ---------------------------------------------------------
-# Calculate final anomaly-detection metrics
-# ---------------------------------------------------------
-
-# Actual anomaly labels.
-y_true = results["is_anomalous"]
-
-# Predicted anomaly labels.
-y_pred = results["predicted_anomaly"]
+false_negative = np.sum(
+    ~predicted_anomalies & actual_anomalies
+)
 
 # Calculate accuracy.
-accuracy = accuracy_score(
-    y_true,
-    y_pred,
+accuracy = (
+    (true_positive + true_negative)
+    / len(actual_anomalies)
 )
 
 # Calculate precision.
-precision = precision_score(
-    y_true,
-    y_pred,
-    zero_division=0,
+precision = (
+    true_positive / (true_positive + false_positive)
+    if (true_positive + false_positive) > 0
+    else 0
 )
 
 # Calculate recall.
-recall = recall_score(
-    y_true,
-    y_pred,
-    zero_division=0,
+recall = (
+    true_positive / (true_positive + false_negative)
+    if (true_positive + false_negative) > 0
+    else 0
 )
 
 # Calculate F1-score.
-f1 = f1_score(
-    y_true,
-    y_pred,
-    zero_division=0,
-)
-
-# Calculate the confusion matrix.
-# Format:
-# [[True Negative, False Positive],
-#  [False Negative, True Positive]]
-confusion = confusion_matrix(
-    y_true,
-    y_pred,
-    labels=[0, 1],
+f1 = (
+    2 * precision * recall / (precision + recall)
+    if (precision + recall) > 0
+    else 0
 )
 
 
-# ---------------------------------------------------------
-# Save evaluation results
-# ---------------------------------------------------------
+# ============================================================
+# Print Final Classification Results
+# ============================================================
 
-# Save actual labels, predicted labels, MSE, and metadata.
-results.to_csv(
-    OUTPUT_FILE,
-    index=False,
-)
+print("\n" + "=" * 70)
+print(f"Final Classification Results (Threshold = {MSE_THRESHOLD})")
+print("=" * 70)
 
-
-# ---------------------------------------------------------
-# Print final evaluation summary
-# ---------------------------------------------------------
-
-print("\nPrediction Error Summary")
-print("=" * 40)
-print(f"Device: {DEVICE}")
-print(f"Validation sequences: {len(results)}")
-print(f"Overall validation MSE: {overall_mse:.6f}")
-print(f"Normal samples: {len(normal_results)}")
-print(f"Normal MSE: {normal_mse:.6f}")
-print(f"Anomalous samples: {len(anomalous_results)}")
-print(f"Anomalous MSE: {anomalous_mse:.6f}")
-
-print("\nFinal Anomaly Detection Results")
-print("=" * 40)
-print(f"MSE Threshold: {MSE_THRESHOLD}")
-print(f"Accuracy      : {accuracy:.4f}")
-print(f"Precision     : {precision:.4f}")
-print(f"Recall        : {recall:.4f}")
-print(f"F1-score      : {f1:.4f}")
+print(f"Accuracy:  {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall:    {recall:.4f}")
+print(f"F1-score:  {f1:.4f}")
 
 print("\nConfusion Matrix")
-print("=" * 40)
-print(confusion)
+print(
+    f"[[{true_negative}, {false_positive}], "
+    f"[{false_negative}, {true_positive}]]"
+)
 
-print(f"\nEvaluation results saved to: {OUTPUT_FILE}")
+
+# ============================================================
+# Normal vs Anomalous Prediction Error
+# ============================================================
+
+# Separate prediction errors for normal and anomalous samples.
+normal_mask = labels == 0
+anomalous_mask = labels == 1
+
+normal_mse = (
+    np.mean(sample_mse[normal_mask])
+    if np.any(normal_mask)
+    else np.nan
+)
+
+anomalous_mse = (
+    np.mean(sample_mse[anomalous_mask])
+    if np.any(anomalous_mask)
+    else np.nan
+)
+
+print("\nPrediction Error by Class")
+print("-" * 70)
+
+print(
+    f"Normal samples: {np.sum(normal_mask)} | "
+    f"MSE: {normal_mse:.6f}"
+)
+
+print(
+    f"Anomalous samples: {np.sum(anomalous_mask)} | "
+    f"MSE: {anomalous_mse:.6f}"
+)
+
+
+# ============================================================
+# Save Evaluation Results
+# ============================================================
+
+# Create a DataFrame containing sequence-level evaluation results.
+results_df = pd.DataFrame({
+    "sample_index": np.arange(len(sample_mse)),
+    "mse": sample_mse,
+    "actual_anomaly": labels,
+    "predicted_anomaly": predicted_anomalies.astype(int)
+})
+
+# Add the selected threshold to the results.
+results_df["mse_threshold"] = MSE_THRESHOLD
+
+# Save results to CSV.
+results_df.to_csv(RESULT_FILE, index=False)
+
+print("\n" + "=" * 70)
+print(f"Evaluation results saved to: {RESULT_FILE}")
+print("=" * 70)
