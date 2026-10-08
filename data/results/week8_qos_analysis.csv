@@ -1,0 +1,3 @@
+flow_type,off_throughput_mbps,on_throughput_mbps,throughput_change_pct,off_jitter_ms,on_jitter_ms,jitter_change_ms,off_packet_loss_pct,on_packet_loss_pct,loss_change_pct
+Priority_UDP_Video,8.0,3.95,-50.62,0.041,3.432,3.391,0.0,0.0,0.0
+Bulk_TCP_Data,12.02,3.76,-68.72,0.0,0.0,0.0,0.0,0.0,0.0
