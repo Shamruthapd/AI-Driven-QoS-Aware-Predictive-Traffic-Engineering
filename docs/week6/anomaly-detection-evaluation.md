@@ -111,3 +111,32 @@ the event and how often it flags normal traffic.
 The implementation and preliminary evaluation are available. The
 unchecked items must be completed before claiming every Week 6 success
 criterion is satisfied.
+
+## 9. Held-Out Validation Split
+
+The detector was also run against `datasets/processed/val_raw.csv` with
+the threshold held fixed at 5.0. The run retained 171 rows and produced
+121 predictions after accounting for the five-observation history
+required within each switch/port group.
+
+| Metric | Result |
+|---|---:|
+| Evaluated samples | 121 |
+| True positives (TP) | 23 |
+| False negatives (FN) | 12 |
+| False positives (FP) | 27 |
+| True negatives (TN) | 59 |
+| Accuracy | 67.77% |
+| Precision | 46.00% |
+| Recall | 65.71% |
+| F1-score | 54.12% |
+| False-positive rate | 31.40% |
+
+The validation split contains 35 anomalous and 86 normal evaluated
+samples. At threshold 5.0, recall is higher than in the full-dataset
+run, but the false-positive rate is also substantially higher. The
+threshold therefore requires further calibration on designated
+calibration data, followed by evaluation on data not used for tuning.
+
+This validation split tests labelled telemetry, not Member 2's specific
+physical link-failure event. Real-event validation remains outstanding.
