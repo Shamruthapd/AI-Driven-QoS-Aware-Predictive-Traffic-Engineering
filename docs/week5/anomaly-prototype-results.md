@@ -52,3 +52,31 @@ The results show a trade-off between detecting more anomalies and generating fal
 2. Obtain Member 2's independent validation telemetry and real link-failure timestamps.
 3. Evaluate detection performance on those separate events.
 4. Tune the threshold using validation data and document the final metrics.
+
+## 8. Current Dataset Re-run (2026-10-10)
+
+The current `qos_features.csv` contains 864 rows. After cleaning, 854
+rows remain; 804 rows had a usable moving-average prediction.
+
+With `--feature throughput_bps --window 5 --k 3.0`:
+- True positives: 30
+- False negatives: 35
+- False positives: 14
+- True negatives: 725
+- Recall: 46.15%
+- False-positive rate: 1.89%
+
+The current dataset snapshot contains 65 anomalous labels, unlike the
+34 anomalous labels recorded in the earlier preliminary comparison
+above. The earlier table is retained as historical results; the
+measurements should not be compared as if they used identical dataset
+snapshots.
+
+The two scripted event windows were also checked separately. The
+detector flagged 6 of 22 rows in the first event and 2 of 12 rows in
+the second. Thus each event had at least one detection, but many
+anomalous samples were missed.
+
+These results are preliminary because the residual threshold was
+calibrated from normal-labelled samples in the same dataset. Week 6
+must integrate the LSTM and validate it against separate event data.
