@@ -140,3 +140,19 @@ calibration data, followed by evaluation on data not used for tuning.
 
 This validation split tests labelled telemetry, not Member 2's specific
 physical link-failure event. Real-event validation remains outstanding.
+
+### Validation Dataset Clarification
+
+The confirmed held-out validation results above use the interface-grouped
+validation split, with rows sorted by timestamp within each switch/port
+group before generating five-step input sequences. Each prediction is
+aligned with the ground-truth label of its next observation.
+
+An earlier experiment used a separate 285-row continuous aggregated
+telemetry dataset before interface grouping. Its results are a separate
+experiment and should not be combined directly with the 121-sequence
+validation metrics reported above.
+
+The threshold remains fixed at 5.0 for this evaluation; independent
+threshold calibration and validation against a timestamped physical
+link-failure event remain outstanding.
