@@ -1,0 +1,14 @@
+timestamp,dpid,port,rx_packets,tx_packets,rx_bytes,tx_bytes,rx_dropped,tx_dropped,rx_errors,tx_errors,is_anomalous,event_note
+2026-10-18T03:59:40Z,1,1,12400,12380,1440000,1438000,0,0,0,0,0,Pre-failure baseline observation 1
+2026-10-18T03:59:45Z,1,1,12420,12390,1442000,1439000,0,0,0,0,0,Pre-failure baseline observation 2
+2026-10-18T03:59:50Z,1,1,12450,12410,1445000,1441000,0,0,0,0,0,Pre-failure baseline observation 3
+2026-10-18T03:59:55Z,1,1,12480,12450,1448000,1445000,0,0,0,0,0,Pre-failure baseline observation 4
+2026-10-18T04:00:00Z,1,1,12500,12480,1450000,1448000,0,0,0,0,0,Pre-failure baseline observation 5
+2026-10-18T04:00:05Z,1,1,12550,12510,1455000,1452000,0,0,0,0,0,Pre-failure baseline observation 6
+2026-10-18T04:00:10Z,1,1,3200,3190,380000,378000,150,140,5,4,1,Physical link failure s1-s2 down (Start)
+2026-10-18T04:00:15Z,1,1,100,90,12000,11000,850,840,25,22,1,Active link down outage window 1
+2026-10-18T04:00:20Z,1,1,120,110,14000,13000,800,790,20,18,1,Active link down outage window 2
+2026-10-18T04:00:25Z,1,1,12400,12390,1440000,1438000,0,0,0,0,0,Link restored (End of anomaly)
+2026-10-18T04:00:30Z,1,1,12520,12500,1452000,1450000,0,0,0,0,0,Post-recovery normal traffic 1
+2026-10-18T04:00:35Z,1,1,12540,12520,1454000,1452000,0,0,0,0,0,Post-recovery normal traffic 2
+2026-10-18T04:00:40Z,1,1,12560,12530,1456000,1453000,0,0,0,0,0,Post-recovery normal traffic 3
