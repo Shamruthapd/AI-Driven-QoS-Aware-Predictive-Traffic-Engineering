@@ -1,6 +1,7 @@
 import json
 import csv
 import os
+import re
 
 def parse_results():
     results = []
@@ -13,12 +14,24 @@ def parse_results():
         if os.path.exists(priority_file):
             with open(priority_file) as f:
                 data = json.load(f)
-                end = data.get('end', {}).get('sum', {})
-                throughput_mbps = (end.get('bits_per_second', 0)) / 1e6
-                jitter_ms = end.get('jitter_ms', 0)
-                lost_packets = end.get('lost_packets', 0)
-                packets = end.get('packets', 1)
-                loss_percent = (lost_packets / packets) * 100 if packets > 0 else 0
+                server_text = data.get('server_output_text', '')
+                receiver_lines = [
+                    line for line in server_text.splitlines()
+                    if 'receiver' in line and 'Mbits/sec' in line
+                ]
+                if not receiver_lines:
+                    raise ValueError(f"Receiver summary missing in {priority_file}")
+                match = re.search(
+                    r'([0-9.]+)\s+Mbits/sec\s+([0-9.]+)\s+ms\s+(\d+)/(\d+)\s+\(([0-9.]+)%\).*receiver',
+                    receiver_lines[-1]
+                )
+                if not match:
+                    raise ValueError(f"Could not parse receiver summary in {priority_file}: {receiver_lines[-1]}")
+                throughput_mbps = float(match.group(1))
+                jitter_ms = float(match.group(2))
+                lost_packets = int(match.group(3))
+                packets = int(match.group(4))
+                loss_percent = float(match.group(5))
                 
                 results.append({
                     'qos_state': qos_state.upper(),

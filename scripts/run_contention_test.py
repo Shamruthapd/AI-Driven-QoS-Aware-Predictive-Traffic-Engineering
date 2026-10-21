@@ -29,7 +29,23 @@ def run_contention_bench(qos_status="OFF"):
 
     if qos_status == "ON":
         print("[+] Applying Data-Plane Queue Rules...")
-        subprocess.run(["sudo", "./mininet/configure_queues.sh"], check=True)
+        subprocess.run(
+            ["sudo", "./mininet/configure_queues.sh"],
+            check=True
+        )
+
+        print("[+] Assigning traffic to QoS queues...")
+        subprocess.run([
+            "sudo", "ovs-ofctl", "-O", "OpenFlow13",
+            "add-flow", "s1",
+            "priority=100,ip,nw_proto=6,tp_dst=5201,actions=set_queue:0,output:2"
+        ], check=True)
+
+        subprocess.run([
+            "sudo", "ovs-ofctl", "-O", "OpenFlow13",
+            "add-flow", "s1",
+            "priority=100,ip,nw_proto=17,tp_dst=5202,actions=set_queue:1,output:3"
+        ], check=True)
 
     # Start iperf servers
     h2.cmd('iperf3 -s -p 5201 &')
@@ -42,13 +58,20 @@ def run_contention_bench(qos_status="OFF"):
 
     # Run simultaneous flows for 15 seconds
     h2_cmd = f"iperf3 -c 10.0.0.2 -p 5201 -b 12M -t 15 --json > logs/h2_bulk_{qos_status.lower()}.json &"
-    h3_cmd = f"iperf3 -c 10.0.0.3 -p 5202 -u -b 8M -t 15 --json > logs/h3_priority_{qos_status.lower()}.json &"
+    h3_cmd = f"iperf3 -c 10.0.0.3 -p 5202 -u -b 8M -t 15 --get-server-output --json > logs/h3_priority_{qos_status.lower()}.json &"
 
     h1.cmd(h2_cmd)
     h1.cmd(h3_cmd)
 
     time.sleep(18)
 
+    if qos_status == "ON":
+        print("\n=== QoS flow rules ===")
+        subprocess.run(["sudo", "ovs-ofctl", "-O", "OpenFlow13", "dump-flows", "s1"])
+        print("\n=== Queue statistics: port 2 ===")
+        subprocess.run(["sudo", "ovs-ofctl", "-O", "OpenFlow13", "queue-stats", "s1", "2"])
+        print("\n=== Queue statistics: port 3 ===")
+        subprocess.run(["sudo", "ovs-ofctl", "-O", "OpenFlow13", "queue-stats", "s1", "3"])
     h2.cmd('pkill iperf3')
     h3.cmd('pkill iperf3')
     net.stop()

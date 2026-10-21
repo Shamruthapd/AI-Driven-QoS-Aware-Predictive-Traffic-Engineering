@@ -2,103 +2,66 @@
 
 ## 1. Objective
 
-Analyze the Week 8 contention benchmark measurements and quantify the effect of QoS enforcement on the priority UDP and bulk TCP flows.
+Analyze the contention benchmark measurements and quantify the effect of enabling QoS on priority UDP video traffic and bulk TCP data traffic.
 
 ## 2. Input Measurements
 
-The benchmark measurements were collected for two network states:
+The benchmark compared QoS OFF and QoS ON using simultaneous traffic flows:
 
-- QoS OFF
-- QoS ON
+- Priority UDP video: client sends to host `h3` on UDP port 5202.
+- Bulk TCP data: client sends to host `h2` on TCP port 5201.
 
-Two traffic flows were evaluated:
-
-- Priority UDP video flow
-- Bulk TCP data flow
-
-The measurements include throughput, jitter, and packet loss.
+UDP throughput, jitter, and packet loss below are taken from iperf3 receiver output. TCP throughput is taken from the TCP receiver summary.
 
 ## 3. QoS OFF vs QoS ON Results
 
-| Flow | QoS OFF Throughput | QoS ON Throughput | Throughput Change |
+| Metric | QoS OFF | QoS ON | Change |
 |---|---:|---:|---:|
-| Priority UDP Video | 8.00 Mbps | 3.95 Mbps | -50.62% |
-| Bulk TCP Data | 12.02 Mbps | 3.76 Mbps | -68.72% |
+| Priority UDP receiver throughput | 7.98 Mbps | 7.98 Mbps | 0.00% |
+| Priority UDP receiver jitter | 0.014 ms | 0.023 ms | +0.009 ms |
+| Priority UDP receiver packet loss | 0.0% | 0.0% | 0.0 percentage points |
+| Bulk TCP receiver throughput | 12.00 Mbps | 3.82 Mbps | -68.17% |
 
-The QoS ON state reduced the measured throughput of both flows.
+The QoS-enabled run substantially reduced measured TCP throughput while the UDP flow maintained approximately 7.98 Mbps. Receiver-side UDP jitter increased slightly from 0.014 ms to 0.023 ms.
 
 ## 4. Priority UDP Analysis
 
-For the priority UDP video flow:
+- QoS OFF receiver throughput: 7.98 Mbps.
+- QoS ON receiver throughput: 7.98 Mbps.
+- QoS OFF receiver jitter: 0.014 ms.
+- QoS ON receiver jitter: 0.023 ms.
+- Receiver-reported packet loss: 0 of 10,359 datagrams in each run (0%).
 
-- QoS OFF throughput: 8.00 Mbps
-- QoS ON throughput: 3.95 Mbps
-- Throughput change: -50.62%
-- QoS OFF jitter: 0.041 ms
-- QoS ON jitter: 3.432 ms
-- Jitter increase: 3.391 ms
-- Packet loss remained 0%
+The QoS-enabled benchmark installed an OpenFlow rule matching UDP destination port 5202 and applying `set_queue:1` before output to `s1-eth3`.
 
-The priority UDP flow therefore experienced a significant throughput reduction and increased jitter when QoS was enabled.
-
-The current benchmark report indicates that the priority UDP flow was assigned to Queue 0 instead of the intended Queue 1. Therefore, these measurements do not yet demonstrate the final priority-QoS behavior.
+The flow table showed 10,360 matching UDP packets. Queue statistics for port 3 showed Queue 1 transmitted 10,360 packets and 15,434,956 bytes, with zero queue errors. This confirms that Queue 1 was used during the measured run.
 
 ## 5. Bulk TCP Analysis
 
-For the bulk TCP data flow:
+- QoS OFF receiver throughput: 12.00 Mbps.
+- QoS ON receiver throughput: 3.82 Mbps.
+- Throughput change: -68.17%.
 
-- QoS OFF throughput: 12.02 Mbps
-- QoS ON throughput: 3.76 Mbps
-- Throughput change: -68.72%
-- Jitter remained 0 ms
-- Packet loss remained 0%
+The benchmark installed an OpenFlow rule matching TCP destination port 5201 and applying `set_queue:0` before output to `s1-eth2`.
 
-The reduction is consistent with the Queue 0 HTB maximum rate of approximately 4 Mbps.
+Queue statistics for port 2 showed Queue 0 transmitted 5,233 packets and 7,876,912 bytes, with zero queue errors. The measured QoS ON TCP throughput is consistent with the configured Queue 0 maximum rate of approximately 4 Mbps.
 
 ## 6. Member 4 Data Pipeline Contribution
 
-Member 4 processed the contention benchmark measurements into a structured CSV:
+- Measurement parser: `scripts/parse_measurements.py`
+- Input JSON files: `logs/h2_bulk_off.json`, `logs/h2_bulk_on.json`, `logs/h3_priority_off.json`, and `logs/h3_priority_on.json`
+- Measurement CSV: `data/results/week8_qos_on_vs_off_measurements.csv`
+- Analysis script: `scripts/analyze_week8_qos.py`
+- Analysis CSV: `data/results/week8_qos_analysis.csv`
 
-`data/results/week8_qos_on_vs_off_measurements.csv`
+The parser reads UDP receiver summaries from iperf3 server output and writes throughput, jitter, and packet-loss measurements. The analysis script calculates throughput percentage change, jitter change, and packet-loss change between the two states.
 
-The analysis script:
+## 7. Findings and Limitations
 
-`scripts/analyze_week8_qos.py`
+The measured run confirms that the intended TCP-to-Queue-0 and UDP-to-Queue-1 mappings carried traffic. The TCP throughput decreased by 68.17%, while UDP receiver throughput remained stable at 7.98 Mbps with zero reported loss.
 
-produces:
-
-`data/results/week8_qos_analysis.csv`
-
-The analysis calculates:
-
-- QoS OFF throughput
-- QoS ON throughput
-- Percentage throughput change
-- QoS OFF jitter
-- QoS ON jitter
-- Jitter change
-- QoS OFF packet loss
-- QoS ON packet loss
-- Packet loss change
-
-## 7. Current Finding
-
-The Week 8 benchmark confirms that the QoS configuration is actively affecting traffic.
-
-However, the current results should not be interpreted as the final priority-QoS result because the priority UDP flow is currently using Queue 0.
-
-The Week 8 benchmark report identifies the required controller-side change:
-
-`actions=set_queue:1`
-
-for the priority UDP flow targeting destination UDP port 5202 / host `10.0.0.3`.
-
-After the controller-side queue binding is corrected, the contention benchmark should be repeated and the resulting measurements should be analyzed again.
+These are single-run results, not repeated-trial statistics. They demonstrate the observed behavior under this test configuration but do not establish a universal priority guarantee under all traffic loads.
 
 ## 8. Member 4 Conclusion
 
-Member 4 has completed the data-analysis portion of the Week 8 contention benchmark.
-
-The current results demonstrate measurable QoS impact and provide a reproducible quantitative comparison between QoS OFF and QoS ON states.
-
-The next validation should be performed after the priority UDP flow is correctly mapped to Queue 1. This will allow the final QoS-aware traffic engineering behavior to be evaluated using the same measurement and analysis pipeline.
+The Week 8 measurement and analysis pipeline has been executed successfully. Receiver-side UDP metrics and actual OpenFlow queue counters have been captured, and the reports document the latest measurements and their limitations.
