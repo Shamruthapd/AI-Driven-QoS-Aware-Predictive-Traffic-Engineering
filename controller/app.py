@@ -9,6 +9,8 @@ from os_ken.ofproto import ofproto_v1_3
 from os_ken.lib.packet import ethernet
 from os_ken.lib.packet import ether_types
 from os_ken.lib.packet import packet
+from os_ken.lib.packet import ipv4
+from os_ken.lib.packet import udp
 
 
 class AIQoSSDNController(app_manager.OSKenApp):
@@ -189,23 +191,51 @@ class AIQoSSDNController(app_manager.OSKenApp):
 
             return
 
-        # Create output action.
-        actions = [
-            parser.OFPActionOutput(out_port)
-        ]
+        # Identify priority UDP traffic for the contention-test receiver.
+        ip_pkt = pkt.get_protocol(ipv4.ipv4)
+        udp_pkt = pkt.get_protocol(udp.udp)
 
-        # Install a forwarding flow only when the destination
-        # is known.
+        is_priority_udp = (
+            ip_pkt is not None
+            and udp_pkt is not None
+            and ip_pkt.dst == "10.0.0.3"
+            and udp_pkt.dst_port == 5202
+            and dpid == 1
+            and out_port == 3
+        )
+
+        # Select Queue 1 only for known-destination priority UDP traffic.
+        actions = []
+
+        if out_port != ofproto.OFPP_FLOOD and is_priority_udp:
+            actions.append(parser.OFPActionSetQueue(1))
+
+        actions.append(parser.OFPActionOutput(out_port))
+
+        # Install a specific higher-priority flow for priority UDP.
+        # Other traffic retains the existing generic forwarding rule.
         if out_port != ofproto.OFPP_FLOOD:
 
-            match = parser.OFPMatch(
-                in_port=in_port,
-                eth_dst=dst
-            )
+            if is_priority_udp:
+                match = parser.OFPMatch(
+                    in_port=in_port,
+                    eth_dst=dst,
+                    eth_type=ether_types.ETH_TYPE_IP,
+                    ip_proto=17,
+                    ipv4_dst="10.0.0.3",
+                    udp_dst=5202
+                )
+                flow_priority = 20
+            else:
+                match = parser.OFPMatch(
+                    in_port=in_port,
+                    eth_dst=dst
+                )
+                flow_priority = 10
 
             self.add_flow(
                 datapath=datapath,
-                priority=10,
+                priority=flow_priority,
                 match=match,
                 actions=actions
             )
