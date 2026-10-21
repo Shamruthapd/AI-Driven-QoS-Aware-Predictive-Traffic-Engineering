@@ -40,3 +40,14 @@ existing QoS and Queue objects before configuring them.
 ## Conclusion
 The controller change passes offline syntax and import checks. Live QoS
 integration and performance validation remain pending.
+
+## Member 3 policy-engine test — 2026-10-21
+- Ran `python ai-model/qos_policy_engine.py --input data/processed_features.csv --log /tmp/policy-test.md`.
+- Processed 285 historical telemetry rows and logged 285 decisions.
+- Results: 16 `CONGESTION_CONFIRMED`, 51 `CONGESTION_CONTINUES_NO_REPEAT`,
+  16 `CONGESTION_CLEARED`, and 202 `WAITING_FOR_CONFIRMATION`.
+- The two-consecutive-reading stability rule was exercised.
+- Test ran in dry-run mode; no live network changes were made.
+- This test validates historical decision logic only. It does not validate
+  live prediction ingestion, automated controller enforcement, or live QoS
+  performance improvement.
