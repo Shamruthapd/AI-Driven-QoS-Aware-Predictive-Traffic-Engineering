@@ -1,0 +1,7 @@
+scenario,system,flow_type,throughput_mbps,jitter_ms,packet_loss_pct,evidence_status,notes
+contention_off,baseline,Priority_UDP_Video,7.98,0.014,0.0,measured,"UDP receiver measurement; QoS disabled."
+contention_off,baseline,Bulk_TCP_Data,12.00,,,measured,"TCP receiver measurement; jitter and packet loss not recorded in the summary."
+contention_on,qos_enabled,Priority_UDP_Video,7.98,0.023,0.0,measured,"UDP receiver measurement; QoS enabled."
+contention_on,qos_enabled,Bulk_TCP_Data,3.82,,,measured,"TCP receiver measurement; jitter and packet loss not recorded in the summary."
+full_system_baseline,baseline,,,,,pending,"Requires matched baseline measurements and teammate logs."
+full_system_ai_driven,ai_driven,,,,,pending,"Requires Member 1 enforcement log, Member 3 decision log, and Member 2 measurements."
