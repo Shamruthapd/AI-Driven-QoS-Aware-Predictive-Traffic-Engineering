@@ -1,4 +1,3 @@
-
 # ai-model/evaluate_lstm.py
 # LSTM validation with telemetry-gap filtering and integration export.
 
@@ -218,7 +217,9 @@ print(f"Device: {DEVICE}")
 print(f"Maximum allowed gap: {MAX_GAP_SECONDS} seconds")
 
 if not os.path.exists(VAL_FILE):
-    raise FileNotFoundError(f"Validation file not found: {VAL_FILE}")
+    raise FileNotFoundError(
+        f"Validation file not found: {VAL_FILE}"
+    )
 
 df = pd.read_csv(VAL_FILE)
 
@@ -239,18 +240,16 @@ if missing_columns:
         f"Validation dataset is missing columns: {missing_columns}"
     )
 
-print(f"Validation rows before cleaning: {len(df)}")
-
-df = df.dropna(subset=required_columns).copy()
-
-df["is_anomalous"] = pd.to_numeric(
-    df["is_anomalous"],
-    errors="coerce",
+print(
+    f"Validation rows retained for boundary-aware processing: "
+    f"{len(df)}"
 )
 
-df = df[df["is_anomalous"].isin([0, 1])].copy()
-
-print(f"Validation rows after cleaning: {len(df)}")
+# IMPORTANT:
+# Do not drop rows with missing features, timestamps, or labels here.
+# create_sequences() must see invalid rows to preserve sequence boundaries.
+# Invalid labels are also retained as boundaries and cannot be included
+# in an input-target window because create_sequences() checks row_valid.
 
 
 # ============================================================
@@ -266,7 +265,9 @@ print(f"Long gaps detected: {gaps_detected}")
 print(f"Valid validation sequences: {len(X)}")
 
 if len(X) == 0:
-    raise ValueError("No validation sequences remain after gap filtering.")
+    raise ValueError(
+        "No validation sequences remain after gap filtering."
+    )
 
 print(f"Input shape: {X.shape}")
 print(f"Target shape: {y.shape}")
@@ -277,7 +278,9 @@ print(f"Target shape: {y.shape}")
 # ============================================================
 
 if not os.path.exists(SCALER_FILE):
-    raise FileNotFoundError(f"Scaler file not found: {SCALER_FILE}")
+    raise FileNotFoundError(
+        f"Scaler file not found: {SCALER_FILE}"
+    )
 
 scaler = joblib.load(SCALER_FILE)
 
@@ -287,7 +290,9 @@ scaler = joblib.load(SCALER_FILE)
 # ============================================================
 
 if not os.path.exists(MODEL_FILE):
-    raise FileNotFoundError(f"Model checkpoint not found: {MODEL_FILE}")
+    raise FileNotFoundError(
+        f"Model checkpoint not found: {MODEL_FILE}"
+    )
 
 checkpoint = torch.load(
     MODEL_FILE,

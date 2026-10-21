@@ -1,8 +1,13 @@
+
 import re
 
 import pandas as pd
 from pathlib import Path
 
+
+# ------------------------------------------------------------
+# Paths
+# ------------------------------------------------------------
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -19,6 +24,11 @@ OUTPUT_FILE = (
     / "processed"
     / "qos_features.csv"
 )
+
+
+# Maximum interval allowed for rate calculations.
+# Longer intervals are treated as discontinuities.
+MAX_INTERVAL_SECONDS = 10.0
 
 
 COUNTERS = [
@@ -42,29 +52,19 @@ ANOMALY_EVENT_FILE = (
 
 
 def load_anomaly_windows(path=ANOMALY_EVENT_FILE):
-    """
-    Load anomaly start/end windows from the anomaly event log.
-    """
+    """Load anomaly start/end windows from the anomaly event log."""
 
     if not path.exists():
         return pd.DataFrame(
-            columns=[
-                "anomaly_start",
-                "anomaly_end"
-            ]
+            columns=["anomaly_start", "anomaly_end"]
         )
 
-    text = path.read_text(
-        encoding="utf-8"
-    )
+    text = path.read_text(encoding="utf-8")
 
     marker = "## Recorded Events"
 
     if marker in text:
-        text = text.split(
-            marker,
-            1
-        )[1]
+        text = text.split(marker, 1)[1]
 
     starts = re.findall(
         r"^-\s+anomaly_start:\s*(\S+)\s*$",
@@ -80,53 +80,36 @@ def load_anomaly_windows(path=ANOMALY_EVENT_FILE):
 
     if not starts or not ends:
         return pd.DataFrame(
-            columns=[
-                "anomaly_start",
-                "anomaly_end"
-            ]
+            columns=["anomaly_start", "anomaly_end"]
         )
 
-    count = min(
-        len(starts),
-        len(ends)
-    )
+    count = min(len(starts), len(ends))
 
-    windows = pd.DataFrame(
-        {
-            "anomaly_start": pd.to_datetime(
-                starts[:count],
-                utc=True
-            ),
-            "anomaly_end": pd.to_datetime(
-                ends[:count],
-                utc=True
-            ),
-        }
-    ).dropna()
+    windows = pd.DataFrame({
+        "anomaly_start": pd.to_datetime(
+            starts[:count],
+            utc=True,
+            errors="coerce",
+        ),
+        "anomaly_end": pd.to_datetime(
+            ends[:count],
+            utc=True,
+            errors="coerce",
+        ),
+    }).dropna()
 
     return windows
 
 
-def label_anomalous_samples(
-    timestamps,
-    windows
-):
-    """
-    Mark telemetry samples that fall inside
-    an anomaly window.
-    """
+def label_anomalous_samples(timestamps, windows):
+    """Mark samples that fall inside a recorded anomaly window."""
 
-    flag = pd.Series(
-        False,
-        index=timestamps.index
-    )
+    flag = pd.Series(False, index=timestamps.index)
 
     for _, window in windows.iterrows():
-
         in_window = (
-            timestamps >= window["anomaly_start"]
-        ) & (
-            timestamps <= window["anomaly_end"]
+            (timestamps >= window["anomaly_start"])
+            & (timestamps <= window["anomaly_end"])
         )
 
         flag |= in_window
@@ -136,108 +119,148 @@ def label_anomalous_samples(
 
 def main():
 
-    df = pd.read_csv(
-        RAW_FILE
-    )
+    # --------------------------------------------------------
+    # 1. Load and validate raw telemetry
+    # --------------------------------------------------------
+
+    df = pd.read_csv(RAW_FILE)
+
+    print(f"Raw rows loaded: {len(df)}")
 
     df["timestamp"] = pd.to_datetime(
         df["timestamp"],
-        utc=True
+        utc=True,
+        errors="coerce",
     )
 
-    # Label telemetry samples using anomaly windows.
+    required_raw_columns = [
+        "timestamp",
+        "dpid",
+        "port",
+        *COUNTERS,
+    ]
+
+    for column in ["dpid", "port", *COUNTERS]:
+        df[column] = pd.to_numeric(
+            df[column],
+            errors="coerce",
+        )
+
+    before = len(df)
+
+    df = df.dropna(
+        subset=required_raw_columns
+    ).copy()
+
+    print(f"Malformed raw rows removed: {before - len(df)}")
+
+    # Label anomalies using recorded event windows.
     anomaly_windows = load_anomaly_windows()
 
     df["is_anomalous"] = label_anomalous_samples(
         df["timestamp"],
-        anomaly_windows
+        anomaly_windows,
     )
 
-    # Exclude the OpenFlow LOCAL port
-    # from link-level QoS processing.
-    df = df[
-        df["port"] != 4294967294
-    ].copy()
+    # Exclude OpenFlow LOCAL port from link-level processing.
+    df = df[df["port"] != 4294967294].copy()
 
+    # Sort each switch-port stream chronologically.
     df = df.sort_values(
-        [
-            "dpid",
-            "port",
-            "timestamp"
-        ]
-    ).reset_index(
-        drop=True
-    )
+        ["dpid", "port", "timestamp"]
+    ).reset_index(drop=True)
 
     grouped = df.groupby(
-        [
-            "dpid",
-            "port"
-        ],
-        group_keys=False
+        ["dpid", "port"],
+        sort=False,
     )
 
-    # Calculate counter deltas.
-    for column in COUNTERS:
+    # --------------------------------------------------------
+    # 2. Calculate sampling intervals
+    # --------------------------------------------------------
 
-        previous = grouped[column].shift(1)
-
-        delta = (
-            df[column] - previous
-        )
-
-        # Counter reset:
-        # use the current counter value.
-        df[f"{column}_delta"] = delta.where(
-            (delta >= 0) | previous.isna(),
-            df[column]
-        )
-
-    # Time difference in seconds.
     df["interval_seconds"] = (
         grouped["timestamp"]
         .diff()
         .dt.total_seconds()
     )
 
-    # Throughput based on transmitted bytes.
+    valid_interval = (
+        df["interval_seconds"].notna()
+        & (df["interval_seconds"] > 0)
+        & (df["interval_seconds"] <= MAX_INTERVAL_SECONDS)
+    )
+
+    # --------------------------------------------------------
+    # 3. Calculate counter deltas
+    # --------------------------------------------------------
+
+    # Counter deltas are only valid within continuous intervals.
+    # A negative counter difference indicates a reset or session
+    # discontinuity; do not interpret it as ordinary traffic.
+    for column in COUNTERS:
+
+        previous = grouped[column].shift(1)
+
+        delta = df[column] - previous
+
+        valid_counter_delta = (
+            valid_interval
+            & previous.notna()
+            & delta.ge(0)
+        )
+
+        df[f"{column}_delta"] = delta.where(
+            valid_counter_delta
+        )
+
+    # --------------------------------------------------------
+    # 4. Calculate throughput and packet rate
+    # --------------------------------------------------------
+
+    # Invalid intervals and counter resets remain NaN.
+    # Do not replace unknown rates with zero.
     df["throughput_bps"] = (
         df["tx_bytes_delta"] * 8
-        / df["interval_seconds"]
+        / df["interval_seconds"].where(valid_interval)
     )
 
-    # Packet rate based on transmitted packets.
     df["packet_rate_pps"] = (
         df["tx_packets_delta"]
-        / df["interval_seconds"]
+        / df["interval_seconds"].where(valid_interval)
     )
 
-    # Detect extreme traffic bursts.
+    # --------------------------------------------------------
+    # 5. Combine anomaly labels
+    # --------------------------------------------------------
+
+    # Retain the existing traffic-based thresholds.
     traffic_anomaly = (
         (df["throughput_bps"] > 1e8)
-        |
-        (df["packet_rate_pps"] > 2.5e5)
-    )
+        | (df["packet_rate_pps"] > 2.5e5)
+    ).fillna(False)
 
-    # Combine timestamp-based and traffic-based labels.
     df["is_anomalous"] = (
         (df["is_anomalous"] == 1)
-        |
-        traffic_anomaly
+        | traffic_anomaly
     ).astype("int64")
 
-    # Packet drops observed during each interval.
-    df["rx_dropped_delta"] = (
-        df["rx_dropped_delta"]
-        .clip(lower=0)
-    )
+    # --------------------------------------------------------
+    # 6. Keep nonnegative drop/error counter deltas
+    # --------------------------------------------------------
 
-    df["tx_dropped_delta"] = (
-        df["tx_dropped_delta"]
-        .clip(lower=0)
-    )
+    for column in [
+        "rx_dropped_delta",
+        "tx_dropped_delta",
+        "rx_errors_delta",
+        "tx_errors_delta",
+    ]:
+        df[column] = df[column].clip(lower=0)
 
-    # Keep meaningful processed features.
+    # --------------------------------------------------------
+    # 7. Save processed features
+    # --------------------------------------------------------
+
     output_columns = [
         "timestamp",
         "dpid",
@@ -256,38 +279,46 @@ def main():
         "is_anomalous",
     ]
 
-    result = df[
-        output_columns
-    ].copy()
+    result = df[output_columns].copy()
 
-    result.to_csv(
-        OUTPUT_FILE,
-        index=False
+    OUTPUT_FILE.parent.mkdir(
+        parents=True,
+        exist_ok=True,
     )
 
-    anomalous_rows = int(
-        result["is_anomalous"].sum()
+    result.to_csv(OUTPUT_FILE, index=False)
+
+    # --------------------------------------------------------
+    # 8. Report data-quality statistics
+    # --------------------------------------------------------
+
+    invalid_intervals = (
+        result["interval_seconds"].isna()
+        | (result["interval_seconds"] <= 0)
+        | (result["interval_seconds"] > MAX_INTERVAL_SECONDS)
     )
 
-    print(
-        f"Anomaly windows parsed: "
-        f"{len(anomaly_windows)}"
+    invalid_rates = (
+        result["throughput_bps"].isna()
+        | result["packet_rate_pps"].isna()
     )
 
-    print(
-        f"Anomalous rows labelled: "
-        f"{anomalous_rows}"
-    )
+    high_throughput = (
+        result["throughput_bps"] > 1e8
+    ).fillna(False)
 
-    print(
-        f"Processed rows: "
-        f"{len(result)}"
-    )
-
-    print(
-        f"Output: "
-        f"{OUTPUT_FILE}"
-    )
+    print()
+    print("========================================")
+    print("TELEMETRY PROCESSING COMPLETE")
+    print("========================================")
+    print(f"Anomaly windows parsed: {len(anomaly_windows)}")
+    print(f"Processed rows: {len(result)}")
+    print(f"Invalid/discontinuous intervals: {int(invalid_intervals.sum())}")
+    print(f"Rows with invalid rate features: {int(invalid_rates.sum())}")
+    print(f"Throughput observations above 100 Mbps: {int(high_throughput.sum())}")
+    print(f"Anomalous rows labelled: {int(result['is_anomalous'].sum())}")
+    print(f"Output: {OUTPUT_FILE}")
+    print("========================================")
 
 
 if __name__ == "__main__":
