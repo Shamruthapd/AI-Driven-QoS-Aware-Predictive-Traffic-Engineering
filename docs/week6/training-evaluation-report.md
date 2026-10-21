@@ -112,3 +112,51 @@ For a sequence length of 5:
 [t1, t2, t3, t4, t5] → predict t6
 [t2, t3, t4, t5, t6] → predict t7
 [t3, t4, t5, t6, t7] → predict t8
+
+---
+
+## 10. Updated Gap-Filtered Evaluation
+
+The evaluation pipeline was updated to prevent forecast sequences from crossing long telemetry gaps or invalid observations.
+
+### Evaluation Configuration
+
+| Parameter | Value |
+|---|---|
+| Maximum allowed time gap | 10 seconds |
+| Input sequence length | 5 observations |
+| Number of input features | 10 |
+| Anomaly MSE threshold | 5.0 |
+| Validation rows before cleaning | 171 |
+| Valid forecast sequences after filtering | 28 |
+| Long gaps detected | 40 |
+
+### Results
+
+| Metric | Result |
+|---|---:|
+| Overall MSE | 11.749613 |
+| Overall MAE | 1.634814 |
+| Accuracy | 57.14% |
+| Precision | 66.67% |
+| Recall | 58.82% |
+| F1-score | 0.6250 |
+
+At the provisional MSE threshold of 5.0, the confusion matrix was:
+
+```text
+[[6, 5],
+ [7, 10]]
+```
+
+The evaluation correctly identified 10 anomalous samples, missed 7 anomalous samples, and incorrectly classified 5 normal samples as anomalous.
+
+### Interpretation and Limitations
+
+This evaluation used 28 valid forecast sequences after gap filtering, compared with 121 samples in the earlier evaluation. The results must therefore be reported separately; the two evaluations use different sample sets.
+
+The reported MAPE is extremely high because the telemetry targets include zero or near-zero values and features with different numerical scales. MAPE is not a reliable headline metric for this dataset without an explicitly justified treatment of zero-valued targets.
+
+The MSE threshold of 5.0 remains provisional. Further threshold validation and evaluation on correctly aligned failure-event telemetry are needed before claiming reliable real-world anomaly detection.
+
+The updated evaluation does not establish successful detection of a genuine physical link failure. That validation remains pending until usable, time-aligned observations and a compatible prediction-to-residual integration test are available.
