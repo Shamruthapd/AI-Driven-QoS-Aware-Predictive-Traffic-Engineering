@@ -99,6 +99,22 @@ def main():
         raise SystemExit(f"Input CSV not found: {args.input}")
 
     df = pd.read_csv(args.input)
+
+    # Support both telemetry and Member 4 prediction-feed column names.
+    if "port_no" not in df.columns and "port" in df.columns:
+        df["port_no"] = df["port"]
+
+    if "tx_throughput_mbps" not in df.columns:
+        if "predicted_throughput_bps" in df.columns:
+            df["tx_throughput_mbps"] = (
+                pd.to_numeric(df["predicted_throughput_bps"], errors="coerce")
+                / 1_000_000
+            )
+        elif "predicted_throughput_mbps" in df.columns:
+            df["tx_throughput_mbps"] = pd.to_numeric(
+                df["predicted_throughput_mbps"], errors="coerce"
+            )
+
     required = {"timestamp", "dpid", "port_no", "tx_throughput_mbps"}
     missing = required - set(df.columns)
     if missing:
@@ -117,6 +133,13 @@ def main():
         key = (dpid, port)
         timestamp = row["timestamp"]
         throughput = valid_number(row["tx_throughput_mbps"])
+        anomaly_raw = row.get("predicted_anomaly", pd.NA)
+        anomaly_value = valid_number(anomaly_raw)
+        anomaly_note = (
+            f"Predicted anomaly={int(anomaly_value)} (logged separately)"
+            if anomaly_value is not None
+            else "Predicted anomaly unavailable"
+        )
 
         ts_text = timestamp.isoformat() if pd.notna(timestamp) else "INVALID_TIMESTAMP"
 
@@ -168,7 +191,7 @@ def main():
             "timestamp": ts_text, "dpid": dpid, "port": port,
             "throughput": f"{throughput:.4f}",
             "high_count": high_counts[key],
-            "decision": decision, "action": action,
+            "decision": decision, "action": f"{action}; {anomaly_note}",
         })
 
     append_log(
