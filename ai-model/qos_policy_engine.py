@@ -12,7 +12,7 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_INPUT = ROOT / "data/processed_features.csv"
+DEFAULT_INPUT = ROOT / "ai-model/integration_predictions.csv"
 DEFAULT_LOG = ROOT / "docs/week8/policy-decisions-log.md"
 
 THRESHOLD_MBPS = 10.0
