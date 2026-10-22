@@ -1,0 +1,12 @@
+# Member 4 Week 9 AI runtime configuration
+polling_interval_seconds: 5
+telemetry_csv: datasets/processed/qos_features.csv
+output_jsonl: data/results/week9_ai_runtime.jsonl
+link_capacity_bps: 10000000
+max_telemetry_age_seconds: 15
+max_gap_seconds: 10
+sequence_length: 5
+anomaly_mse_threshold: 5.0
+model_checkpoint: ai-model/checkpoints/lstm_model.pt
+scaler_path: datasets/processed/scaler.pkl
+use_model: true
