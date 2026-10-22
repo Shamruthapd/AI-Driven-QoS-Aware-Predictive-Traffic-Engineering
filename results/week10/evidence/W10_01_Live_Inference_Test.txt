@@ -1,0 +1,51 @@
+Week 10 Live AI Inference and Policy Test
+=========================================
+
+Date:
+2026-10-22
+
+Branch:
+member1/week10-ai-policy-integration
+
+Controller:
+OS-Ken SDN controller
+
+Telemetry polling interval:
+5 seconds
+
+Model input shape:
+(1, 5, 10)
+
+MSE threshold:
+5.0
+
+Live inference observations:
+- DPID=1, PORT=4, MSE=0.001105, CLASS=NORMAL, QUEUE=0
+- DPID=1, PORT=1, MSE=0.004468, CLASS=NORMAL, QUEUE=0
+- DPID=1, PORT=2, MSE=0.004466, CLASS=NORMAL, QUEUE=0
+- DPID=1, PORT=3, MSE=0.001105, CLASS=NORMAL, QUEUE=0
+- DPID=2, PORT=1, MSE=0.004452, CLASS=NORMAL, QUEUE=0
+- DPID=2, PORT=4, MSE=0.001100, CLASS=NORMAL, QUEUE=0
+- DPID=2, PORT=2, MSE=0.004452, CLASS=NORMAL, QUEUE=0
+- DPID=2, PORT=3, MSE=0.001104, CLASS=NORMAL, QUEUE=0
+- DPID=3, PORT=1, MSE=0.001094, CLASS=NORMAL, QUEUE=0
+- DPID=3, PORT=2, MSE=0.001098, CLASS=NORMAL, QUEUE=0
+
+Observed inference latency:
+Approximately 5–10 ms per inference.
+
+Synthetic policy verification:
+- Zero-error input:
+  MSE=0.0, classification=NORMAL, queue_id=0
+- High-error input:
+  MSE=9.0, classification=ANOMALOUS, queue_id=1
+
+Output file:
+results/week6/predictions.csv
+
+Result:
+PASS
+
+The controller successfully processed live OpenFlow telemetry,
+generated five-sample LSTM inputs, produced predictions, calculated
+scaled MSE values, and generated AI queue-policy decisions.
