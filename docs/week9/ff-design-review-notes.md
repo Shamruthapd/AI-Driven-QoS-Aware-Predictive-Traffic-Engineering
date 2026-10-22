@@ -34,3 +34,22 @@ No successful failover or recovery-time result is established by this code searc
 
 ## Review Conclusion
 The design is documented, but implementation and live failover remain unverified. Do not mark the failover requirement complete until evidence is collected.
+
+## Source-Code Review Results
+
+### Controller Inspection
+Reviewed `controller/app.py`, including switch initialization, flow installation, packet forwarding, and `apply_qos_policy()`.
+
+- Ordinary MAC-learning forwarding is present.
+- A priority UDP flow and QoS queue-selection logic are present.
+- No Fast-Failover group creation, backup buckets, or watched-port configuration were found in the inspected controller code.
+- No port-status event handler was found in the inspected controller code.
+- The priority flow uses a direct output action rather than a Fast-Failover group.
+
+### Discrepancy and Required Follow-Up
+The documented self-healing design requires switch-local primary-to-backup failover. The inspected controller code does not demonstrate that behaviour.
+
+Coordinate with Member 1 to confirm whether Fast-Failover implementation exists on another branch or is still pending. Do not duplicate or modify their implementation before confirming ownership.
+
+### Verification Status
+Source review completed for the inspected controller code. Port-map agreement, implementation elsewhere in the repository, and live failover behaviour remain to be verified. No recovery-time results are claimed.
