@@ -36,6 +36,18 @@ class AIQoSSDNController(app_manager.OSKenApp):
     S2_FF_PORTS = (3,)
     S3_FF_PORTS = (1,)
 
+    FF_DESTINATIONS = {
+        1: {
+            "00:00:00:00:00:03": S1_FF_GROUP,
+        },
+        2: {
+            "00:00:00:00:00:01": S2_FF_GROUP,
+        },
+        3: {
+            "00:00:00:00:00:01": S3_FF_GROUP,
+        },
+    }
+
     def __init__(self, *args, **kwargs):
         super(AIQoSSDNController, self).__init__(*args, **kwargs)
 
@@ -63,6 +75,7 @@ class AIQoSSDNController(app_manager.OSKenApp):
     def switch_features_handler(self, ev):
         datapath = ev.msg.datapath
         self.datapaths[datapath.id] = datapath
+
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
 
@@ -154,9 +167,28 @@ class AIQoSSDNController(app_manager.OSKenApp):
         self,
         datapath,
         out_port,
-        parser
+        parser,
+        dst=None
     ):
         dpid = datapath.id
+
+        forced_group = self.FF_DESTINATIONS.get(
+            dpid,
+            {}
+        ).get(dst)
+
+        if forced_group is not None:
+            self.logger.info(
+                "Fast-Failover forwarding | "
+                "DPID=%s | DST=%s | GROUP=%s",
+                dpid,
+                dst,
+                forced_group
+            )
+
+            return [
+                parser.OFPActionGroup(forced_group)
+            ]
 
         group_by_dpid = {
             1: (self.S1_FF_GROUP, self.S1_FF_PORTS),
@@ -167,9 +199,9 @@ class AIQoSSDNController(app_manager.OSKenApp):
         group_config = group_by_dpid.get(dpid)
 
         if group_config is not None:
-            group_id, failover_ports = group_config
+            group_id, primary_ports = group_config
 
-            if out_port in failover_ports:
+            if out_port in primary_ports:
                 self.logger.info(
                     "Fast-Failover forwarding | "
                     "DPID=%s | OUT_PORT=%s | GROUP=%s",

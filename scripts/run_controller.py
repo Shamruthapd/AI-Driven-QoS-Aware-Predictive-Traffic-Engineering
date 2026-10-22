@@ -24,6 +24,7 @@ APPLICATIONS = [
     "controller.app",
     "controller.telemetry",
     "controller.monitor",
+    "controller.ff_groups",
 ]
 
 

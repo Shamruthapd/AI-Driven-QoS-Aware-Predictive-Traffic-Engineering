@@ -1,0 +1,40 @@
+WEEK 9 – FAST-FAILOVER CONTROLLED FAILURE TEST
+
+Topology:
+s1 primary path: s1-eth3 -> s3
+s1 backup path:  s1-eth4 -> s2
+
+Fast-Failover Group:
+Group ID: 100
+Type: FF
+Primary bucket: watch_port s1-eth3, output s1-eth3
+Backup bucket: watch_port s1-eth4, output s1-eth4
+
+Test:
+Continuous h1 -> h3 ping was started.
+Primary link s1-s3 was brought down.
+Group statistics were checked during the failure.
+
+Baseline group statistics:
+Primary bucket: 526 packets
+Backup bucket: 112 packets
+Total: 638 packets
+
+Failure-test group statistics:
+Primary bucket: 682 packets
+Backup bucket: 525 packets
+Total: 1207 packets
+
+Change during the measured interval:
+Primary bucket: +156 packets
+Backup bucket: +413 packets
+Total: +569 packets
+
+Observation:
+The backup bucket processed a substantial amount of traffic after the
+primary s1-s3 link failure, demonstrating Fast-Failover backup-path use.
+Continuous connectivity between h1 and h3 was maintained during the test.
+
+Note:
+Exact failover/recovery time was not measured, so no specific
+millisecond recovery-time claim is made.
