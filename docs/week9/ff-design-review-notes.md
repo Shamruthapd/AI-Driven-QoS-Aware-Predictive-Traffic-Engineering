@@ -53,3 +53,19 @@ Coordinate with Member 1 to confirm whether Fast-Failover implementation exists 
 
 ### Verification Status
 Source review completed for the inspected controller code. Port-map agreement, implementation elsewhere in the repository, and live failover behaviour remain to be verified. No recovery-time results are claimed.
+
+## Supplemental review — latest Member 1 Week 9 branch
+
+Reviewed commit `25b8c09` (`feat(week9): implement fast failover groups and validation`).
+
+### Confirmed findings
+- `controller/ff_groups.py` defines OpenFlow 1.3 Fast-Failover groups and installs primary and backup buckets using `OFPGroupMod`.
+- The group module is listed in `scripts/run_controller.py` and passed to `app_manager.AppManager.run_apps`.
+- The port-status handler logs link events but does not itself change forwarding rules.
+- The topology link creation order implies s1 ports 3/4 connect to s3/s2, and s2 ports 3/4 connect to s3/s1, respectively.
+- `controller/app.py` defines `S2_FF_PORTS = (3,)`, while the s2 group uses primary port 4 and backup port 3. Verify and reconcile this selection mismatch.
+- `packet_in_handler` calls `get_forwarding_actions` without `dst`, so destination-specific entries in `FF_DESTINATIONS` are not used by that call.
+- Live group installation, successful failover, STP interaction, and recovery-time measurements remain to be validated experimentally.
+
+### Review status
+Source review completed for the inspected files. Findings should be coordinated with Member 1 before any controller changes. No claim of successful live recovery is made until tests provide evidence.
