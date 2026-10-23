@@ -1,0 +1,51 @@
+# ==============================================================================
+# Scenario S1: Steady Mixed Load (Nominal Baseline)
+# Tests steady-state transmission under nominal link capacity (utilization ~65%)
+# ==============================================================================
+
+scenario_id: "S1_steady"
+name: "Steady Mixed Load"
+duration_seconds: 30
+target_mode_compatibility:
+  - "baseline_shortest_path"
+  - "reactive"
+  - "full_ai_qos_ff"
+
+flows:
+  - id: "flow_priority_udp"
+    type: "iperf3_udp"
+    client_host: "h1"
+    server_host: "h3"
+    server_ip: "10.0.0.3"
+    port: 5202
+    bandwidth_mbps: 2.0
+    packet_size_bytes: 1400
+    dscp: 46  # EF (Expedited Forwarding)
+    traffic_class: "PRIORITY"
+    start_time_sec: 2.0
+    duration_sec: 25.0
+
+  - id: "flow_bulk_tcp"
+    type: "iperf3_tcp"
+    client_host: "h2"
+    server_host: "h4"
+    server_ip: "10.0.0.4"
+    port: 5201
+    bandwidth_mbps: 4.0
+    dscp: 0   # Best Effort
+    traffic_class: "BEST_EFFORT"
+    start_time_sec: 3.0
+    duration_sec: 24.0
+
+  - id: "flow_iot_sensor"
+    type: "scapy_iot"
+    client_host: "h2"
+    server_ip: "10.0.0.3"
+    port: 5004
+    rate_pps: 100
+    packet_size_bytes: 128
+    traffic_class: "BEST_EFFORT"
+    start_time_sec: 5.0
+    duration_sec: 20.0
+
+failure_events: []

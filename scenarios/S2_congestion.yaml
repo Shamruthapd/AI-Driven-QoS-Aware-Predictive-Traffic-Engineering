@@ -1,0 +1,52 @@
+# ==============================================================================
+# Scenario S2: Heavy Congestion (Bulk-Dominant)
+# Severe bottleneck saturation (offered load ~17 Mbps vs 10 Mbps bottleneck link)
+# Evaluates AI predictive rerouting and QoS queue differentiation
+# ==============================================================================
+
+scenario_id: "S2_congestion"
+name: "Heavy Congestion (Bulk-Dominant)"
+duration_seconds: 45
+target_mode_compatibility:
+  - "baseline_shortest_path"
+  - "reactive"
+  - "full_ai_qos_ff"
+
+flows:
+  - id: "flow_priority_udp"
+    type: "iperf3_udp"
+    client_host: "h1"
+    server_host: "h3"
+    server_ip: "10.0.0.3"
+    port: 5202
+    bandwidth_mbps: 3.0
+    packet_size_bytes: 1400
+    dscp: 46  # EF
+    traffic_class: "PRIORITY"
+    start_time_sec: 2.0
+    duration_sec: 40.0
+
+  - id: "flow_bulk_tcp_aggressive"
+    type: "iperf3_tcp"
+    client_host: "h2"
+    server_host: "h4"
+    server_ip: "10.0.0.4"
+    port: 5201
+    bandwidth_mbps: 12.0
+    dscp: 0
+    traffic_class: "BEST_EFFORT"
+    start_time_sec: 5.0
+    duration_sec: 35.0
+
+  - id: "flow_bursty_iot"
+    type: "scapy_iot"
+    client_host: "h2"
+    server_ip: "10.0.0.3"
+    port: 5001
+    rate_pps: 250
+    packet_size_bytes: 256
+    traffic_class: "BEST_EFFORT"
+    start_time_sec: 10.0
+    duration_sec: 25.0
+
+failure_events: []

@@ -28,23 +28,31 @@ class AIQoSSDNController(app_manager.OSKenApp):
 
     METADATA_MASK = 0xFFFFFFFFFFFFFFFF
 
-    S1_FF_GROUP = 100
-    S2_FF_GROUP = 200
+    S1_FF_GROUP_PRIORITY = 100
+    S1_FF_GROUP_BEST_EFFORT = 101
+    S2_FF_GROUP_PRIORITY = 200
+    S2_FF_GROUP_BEST_EFFORT = 201
     S3_FF_GROUP = 300
 
+    # Primary egress ports that route inter-switch traffic to s3
     S1_FF_PORTS = (3,)
     S2_FF_PORTS = (3,)
-    S3_FF_PORTS = (1,)
+    S3_FF_PORTS = (1, 2)
 
     FF_DESTINATIONS = {
         1: {
-            "00:00:00:00:00:03": S1_FF_GROUP,
+            "00:00:00:00:00:03": S1_FF_GROUP_PRIORITY,
+            "00:00:00:00:00:04": S1_FF_GROUP_PRIORITY,
         },
         2: {
-            "00:00:00:00:00:01": S2_FF_GROUP,
+            "00:00:00:00:00:01": S2_FF_GROUP_PRIORITY,
+            "00:00:00:00:00:02": S2_FF_GROUP_PRIORITY,
         },
         3: {
             "00:00:00:00:00:01": S3_FF_GROUP,
+            "00:00:00:00:00:02": S3_FF_GROUP,
+            "00:00:00:00:00:03": S3_FF_GROUP,
+            "00:00:00:00:00:04": S3_FF_GROUP,
         },
     }
 
@@ -168,7 +176,8 @@ class AIQoSSDNController(app_manager.OSKenApp):
         datapath,
         out_port,
         parser,
-        dst=None
+        dst=None,
+        traffic_class="BEST_EFFORT"
     ):
         dpid = datapath.id
 
@@ -190,29 +199,39 @@ class AIQoSSDNController(app_manager.OSKenApp):
                 parser.OFPActionGroup(forced_group)
             ]
 
-        group_by_dpid = {
-            1: (self.S1_FF_GROUP, self.S1_FF_PORTS),
-            2: (self.S2_FF_GROUP, self.S2_FF_PORTS),
-            3: (self.S3_FF_GROUP, self.S3_FF_PORTS),
-        }
+        # Select Fast-Failover group based on traffic class for inter-switch links
+        if dpid == 1 and out_port in self.S1_FF_PORTS:
+            group_id = (
+                self.S1_FF_GROUP_PRIORITY
+                if traffic_class == "PRIORITY"
+                else self.S1_FF_GROUP_BEST_EFFORT
+            )
+            self.logger.info(
+                "Fast-Failover forwarding | DPID=%s | OUT_PORT=%s | CLASS=%s | GROUP=%s",
+                dpid,
+                out_port,
+                traffic_class,
+                group_id
+            )
+            return [parser.OFPActionGroup(group_id)]
 
-        group_config = group_by_dpid.get(dpid)
+        elif dpid == 2 and out_port in self.S2_FF_PORTS:
+            group_id = (
+                self.S2_FF_GROUP_PRIORITY
+                if traffic_class == "PRIORITY"
+                else self.S2_FF_GROUP_BEST_EFFORT
+            )
+            self.logger.info(
+                "Fast-Failover forwarding | DPID=%s | OUT_PORT=%s | CLASS=%s | GROUP=%s",
+                dpid,
+                out_port,
+                traffic_class,
+                group_id
+            )
+            return [parser.OFPActionGroup(group_id)]
 
-        if group_config is not None:
-            group_id, primary_ports = group_config
-
-            if out_port in primary_ports:
-                self.logger.info(
-                    "Fast-Failover forwarding | "
-                    "DPID=%s | OUT_PORT=%s | GROUP=%s",
-                    dpid,
-                    out_port,
-                    group_id
-                )
-
-                return [
-                    parser.OFPActionGroup(group_id)
-                ]
+        elif dpid == 3 and out_port in self.S3_FF_PORTS:
+            return [parser.OFPActionGroup(self.S3_FF_GROUP)]
 
         return [
             parser.OFPActionOutput(out_port)
@@ -341,10 +360,13 @@ class AIQoSSDNController(app_manager.OSKenApp):
             )
             return
 
+        traffic_class = classification.traffic_class if classification is not None else "BEST_EFFORT"
         actions = self.get_forwarding_actions(
             datapath=datapath,
             out_port=out_port,
-            parser=parser
+            parser=parser,
+            dst=dst,
+            traffic_class=traffic_class
         )
 
         if out_port != ofproto.OFPP_FLOOD:

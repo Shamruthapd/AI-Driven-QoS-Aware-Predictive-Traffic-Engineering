@@ -1,0 +1,47 @@
+# ==============================================================================
+# Scenario S3: Link Failure Under Load
+# Injects a hard physical link-down on primary backbone link s1-eth3
+# Measures data-plane Fast-Failover recovery time, ping loss, and bucket counters
+# ==============================================================================
+
+scenario_id: "S3_failure"
+name: "Link Failure Under Load"
+duration_seconds: 45
+target_mode_compatibility:
+  - "baseline_shortest_path"
+  - "reactive"
+  - "full_ai_qos_ff"
+
+flows:
+  - id: "flow_priority_udp"
+    type: "iperf3_udp"
+    client_host: "h1"
+    server_host: "h3"
+    server_ip: "10.0.0.3"
+    port: 5202
+    bandwidth_mbps: 3.0
+    packet_size_bytes: 1400
+    dscp: 46
+    traffic_class: "PRIORITY"
+    start_time_sec: 2.0
+    duration_sec: 40.0
+
+  - id: "flow_bulk_tcp"
+    type: "iperf3_tcp"
+    client_host: "h2"
+    server_host: "h4"
+    server_ip: "10.0.0.4"
+    port: 5201
+    bandwidth_mbps: 5.0
+    dscp: 0
+    traffic_class: "BEST_EFFORT"
+    start_time_sec: 4.0
+    duration_sec: 38.0
+
+failure_events:
+  - event_id: "primary_link_cut"
+    interface: "s1-eth3"
+    start_time_sec: 15.0
+    down_duration_sec: 8.0
+    expected_failover_mechanism: "OpenFlow Fast-Failover Group 100"
+    backup_interface: "s1-eth4"

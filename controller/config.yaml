@@ -1,0 +1,45 @@
+# ==============================================================================
+# AI-Driven QoS-Aware Predictive Traffic Engineering & Self-Healing
+# Central Configuration File (Config-Driven Design)
+# ==============================================================================
+
+controller:
+  openflow_ip: "0.0.0.0"
+  openflow_port: 6633
+  bridge_ip: "127.0.0.1"
+  bridge_port: 8080
+  tailscale_ip: "100.85.20.10"
+  log_level: "INFO"
+
+telemetry:
+  polling_interval_sec: 5.0
+  raw_csv_path: "datasets/raw/telemetry.csv"
+  export_history_limit: 1000
+
+ai_inference:
+  checkpoint_path: "ai-model/checkpoints/lstm_model.pt"
+  scaler_path: "datasets/processed/scaler.pkl"
+  sequence_length: 12
+  inference_interval_sec: 5.0
+  anomaly_mse_threshold: 5.0
+  predicted_throughput_threshold_mbps: 10.0
+  graceful_degradation: true
+
+self_healing:
+  cooldown_sec: 15.0
+  congestion_trigger_threshold: 0.85
+  failback_recovery_threshold: 0.60
+  reroute_target_class: "BEST_EFFORT"
+  priority_protection: true
+
+operation_mode:
+  # Mode choices:
+  # 1. baseline_shortest_path (Static shortest path, no AI, no queues, no FF)
+  # 2. reactive (Controller reroutes after receiving port-status event)
+  # 3. full_ai_qos_ff (Proactive AI rerouting + Hardware Fast-Failover + Queues)
+  mode: "full_ai_qos_ff"
+
+logging:
+  unified_event_log: "data/results/unified_event_log.csv"
+  port_status_log: "data/results/port_status_events.csv"
+  timelines_dir: "data/results/week11_controller_timelines"
