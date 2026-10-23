@@ -14,6 +14,7 @@ APPLICATIONS = [
     "controller.app",
     "controller.telemetry",
     "controller.monitor",
+    "controller.ff_groups",
 ]
 
 def patch_hub_thread_kill():
