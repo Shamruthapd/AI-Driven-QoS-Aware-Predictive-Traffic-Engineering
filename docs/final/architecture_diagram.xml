@@ -1,0 +1,153 @@
+<mxfile host="app.diagrams.net" modified="2026-10-23T11:00:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="system-architecture" name="AI-Driven-QoS-SDN-Architecture">
+    <mxGraphModel dx="1422" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Layer 1: Management & AI Plane -->
+        <mxCell id="ai-layer" value="MANAGEMENT &amp; AI PREDICTIVE PLANE" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#0288d1;fontStyle=1;fontSize=14;fontColor=#01579b;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="1000" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="telem-collector" value="&lt;b&gt;Telemetry Collector&lt;/b&gt;&lt;br&gt;Port Stats Polling (5.0s)&lt;br&gt;Delta Aggregation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0288d1;fontSize=12;" vertex="1" parent="ai-layer">
+          <mxGeometry x="40" y="45" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="feature-pipe" value="&lt;b&gt;Feature Pipeline&lt;/b&gt;&lt;br&gt;StandardScaler&lt;br&gt;10-D Delta Vector (L=5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0288d1;fontSize=12;" vertex="1" parent="ai-layer">
+          <mxGeometry x="270" y="45" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="lstm-model" value="&lt;b&gt;PyTorch LSTM Predictor&lt;/b&gt;&lt;br&gt;Latency: 14.8 ms&lt;br&gt;Throughput &amp;amp; Anomaly MSE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1976d2;fontStyle=1;fontSize=12;" vertex="1" parent="ai-layer">
+          <mxGeometry x="500" y="45" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="self-healing" value="&lt;b&gt;Self-Healing Engine&lt;/b&gt;&lt;br&gt;Dual Hysteresis (0.85 / 0.60)&lt;br&gt;15s Cooldown Anti-Flap" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontStyle=1;fontSize=12;" vertex="1" parent="ai-layer">
+          <mxGeometry x="750" y="45" width="210" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ai-conn1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#0288d1;" edge="1" parent="ai-layer" source="telem-collector" target="feature-pipe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ai-conn2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#0288d1;" edge="1" parent="ai-layer" source="feature-pipe" target="lstm-model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ai-conn3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1976d2;" edge="1" parent="ai-layer" source="lstm-model" target="self-healing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 2: Control Plane -->
+        <mxCell id="ctrl-layer" value="SDN CONTROL PLANE (OS-Ken / Ryu Controller)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;fontStyle=1;fontSize=14;fontColor=#4a148c;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="1000" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="northbound" value="&lt;b&gt;REST &amp;amp; Bridge API&lt;/b&gt;&lt;br&gt;Dynamic Mode Switcher&lt;br&gt;Policy Ingestion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7b1fa2;fontSize=12;" vertex="1" parent="ctrl-layer">
+          <mxGeometry x="60" y="45" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="flow-classifier" value="&lt;b&gt;QoS Flow Classifier&lt;/b&gt;&lt;br&gt;DSCP / L4 Port Matching&lt;br&gt;TCP 5001 / UDP 5002" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7b1fa2;fontSize=12;" vertex="1" parent="ctrl-layer">
+          <mxGeometry x="290" y="45" width="190" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ff-manager" value="&lt;b&gt;Fast-Failover Manager&lt;/b&gt;&lt;br&gt;Group 100 (Queue 1)&lt;br&gt;Group 200 (Queue 0)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#8e24aa;fontStyle=1;fontSize=12;" vertex="1" parent="ctrl-layer">
+          <mxGeometry x="530" y="45" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="port-logger" value="&lt;b&gt;Port Status Logger&lt;/b&gt;&lt;br&gt;OFPPortStatus Handler&lt;br&gt;Failure Event Audit Log" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7b1fa2;fontSize=12;" vertex="1" parent="ctrl-layer">
+          <mxGeometry x="770" y="45" width="190" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Northbound / Southbound Connections -->
+        <mxCell id="ai-to-ctrl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#e65100;dashed=1;" edge="1" parent="1" source="self-healing" target="northbound">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="935" y="215" />
+              <mxPoint x="230" y="215" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ai-to-ctrl-label" value="Northbound Flow Offload Commands" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#bf360c;fontStyle=1;" vertex="1" connectable="0" parent="ai-to-ctrl">
+          <mxGeometry x="-0.15" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Layer 3: Data Plane -->
+        <mxCell id="data-layer" value="EDGE DATA PLANE (Mininet / Open vSwitch / Linux Kernel HTB Queues)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;fontStyle=1;fontSize=14;fontColor=#bf360c;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="440" width="1000" height="280" as="geometry" />
+        </mxCell>
+        
+        <!-- Switch 1 -->
+        <mxCell id="sw1" value="&lt;b&gt;Switch S1 (Ingress Edge)&lt;/b&gt;&lt;br&gt;Open vSwitch 2.17&lt;br&gt;OF 1.3 Group Table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#fb8c00;fontSize=12;fontStyle=1;" vertex="1" parent="data-layer">
+          <mxGeometry x="220" y="60" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="sw1-gt" value="&lt;b&gt;Group 100 (Priority):&lt;/b&gt;&lt;br&gt;B1: Watch s1-eth2, SetQ:1&lt;br&gt;B2: Watch s1-eth4, SetQ:1&lt;br&gt;&lt;b&gt;Group 200 (Bulk):&lt;/b&gt;&lt;br&gt;B1: Watch s1-eth2, SetQ:0&lt;br&gt;B2: Watch s1-eth4, SetQ:0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=10;align=left;" vertex="1" parent="sw1">
+          <mxGeometry x="10" y="65" width="200" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Switch 2 -->
+        <mxCell id="sw2" value="&lt;b&gt;Switch S2 (Egress Edge)&lt;/b&gt;&lt;br&gt;Open vSwitch 2.17&lt;br&gt;OF 1.3 Forwarding" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#fb8c00;fontSize=12;fontStyle=1;" vertex="1" parent="data-layer">
+          <mxGeometry x="600" y="60" width="200" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="sw2-ports" value="&lt;b&gt;Egress HTB Queues:&lt;/b&gt;&lt;br&gt;Port s2-eth1: Delivery h3&lt;br&gt;Port s2-eth2: Primary Trunk&lt;br&gt;Port s2-eth4: Backup Trunk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;fontSize=10;align=left;" vertex="1" parent="sw2">
+          <mxGeometry x="10" y="65" width="180" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Hosts -->
+        <mxCell id="host-h1" value="&lt;b&gt;Host h1&lt;/b&gt;&lt;br&gt;Priority UDP&lt;br&gt;Port 5002 (VoIP)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#e53935;fontSize=11;" vertex="1" parent="data-layer">
+          <mxGeometry x="30" y="55" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="host-h2" value="&lt;b&gt;Host h2&lt;/b&gt;&lt;br&gt;Bulk TCP&lt;br&gt;Port 5001 (Data)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="data-layer">
+          <mxGeometry x="30" y="155" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="host-h3" value="&lt;b&gt;Host h3&lt;/b&gt;&lt;br&gt;Priority Target&lt;br&gt;10.0.0.3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#e53935;fontSize=11;" vertex="1" parent="data-layer">
+          <mxGeometry x="850" y="55" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="host-h4" value="&lt;b&gt;Host h4&lt;/b&gt;&lt;br&gt;Bulk Target&lt;br&gt;10.0.0.4" style="ellipse;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1e88e5;fontSize=11;" vertex="1" parent="data-layer">
+          <mxGeometry x="850" y="155" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Switch Links -->
+        <mxCell id="prim-link" value="&lt;b&gt;Primary Link (s1-eth2 - s2-eth2)&lt;/b&gt;&lt;br&gt;10 Mbps | 5 ms Delay | Queue 1 (Priority) + Queue 0 (Bulk)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=4;strokeColor=#2e7d32;" edge="1" parent="data-layer" source="sw1" target="sw2">
+          <mxGeometry y="15" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="490" y="90" />
+              <mxPoint x="550" y="90" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="back-link" value="&lt;b&gt;Backup Link (s1-eth4 - s2-eth4)&lt;/b&gt;&lt;br&gt;10 Mbps | 15 ms Delay | Queue 1 &amp;amp; 0 Preserved (Recovery &amp;lt; 50ms)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#d32f2f;dashed=1;" edge="1" parent="data-layer" source="sw1" target="sw2">
+          <mxGeometry y="-15" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="490" y="210" />
+              <mxPoint x="550" y="210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Host Connections -->
+        <mxCell id="h1-s1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#e53935;" edge="1" parent="data-layer" source="host-h1" target="sw1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h2-s1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1e88e5;" edge="1" parent="data-layer" source="host-h2" target="sw1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s2-h3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#e53935;" edge="1" parent="data-layer" source="sw2" target="host-h3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s2-h4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1e88e5;" edge="1" parent="data-layer" source="sw2" target="host-h4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- OpenFlow Control Channels -->
+        <mxCell id="of-channel1" value="OpenFlow 1.3 Channel (FlowMod / GroupMod)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#7b1fa2;dashed=1;" edge="1" parent="1" source="ff-manager" target="sw1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="of-channel2" value="Port Status &amp;amp; Stats Multiplexing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#0288d1;dashed=1;" edge="1" parent="1" source="sw1" target="telem-collector">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="420" />
+              <mxPoint x="60" y="420" />
+              <mxPoint x="60" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

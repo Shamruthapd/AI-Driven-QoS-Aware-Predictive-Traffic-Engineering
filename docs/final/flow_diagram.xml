@@ -1,0 +1,168 @@
+<mxfile host="app.diagrams.net" modified="2026-10-23T11:05:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="decision-flow" name="AI-Self-Healing-Decision-Flowchart">
+    <mxGraphModel dx="1200" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Start Node -->
+        <mxCell id="start" value="&lt;b&gt;START&lt;/b&gt;&lt;br&gt;Telemetry Loop Interval (Δt = 5.0s)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="314" y="30" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Collect Telemetry -->
+        <mxCell id="collect" value="Poll Port Stats &amp;amp; Compute 10-D Delta Vector:&lt;br&gt;ΔB_tx, ΔP_tx, Dropped, Rate_pps, Rate_bps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#0288d1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="279" y="120" width="270" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="start" target="collect">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Check Physical Port Status -->
+        <mxCell id="port-check" value="Physical Link&lt;br&gt;Carrier Status == DOWN?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#fbc02d;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="299" y="210" width="230" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="collect" target="port-check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Fast Failover Box (YES branch) -->
+        <mxCell id="ff-action" value="&lt;b&gt;HARDWARE FAST-FAILOVER (OVS Datapath)&lt;/b&gt;&lt;br&gt;• Bucket 1 Watch-Port down&lt;br&gt;• Switch immediately engages Bucket 2&lt;br&gt;• Actions: Set-Queue(1) on Backup (s1-eth4)&lt;br&gt;• &lt;b&gt;Sub-50ms Recovery (Mean: 41.0 ms)&lt;/b&gt;&lt;br&gt;• Zero Controller Latency" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#d32f2f;fontSize=11;fontColor=#b71c1c;" vertex="1" parent="1">
+          <mxGeometry x="580" y="212.5" width="230" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="YES (Link Cut)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#d32f2f;fontColor=#d32f2f;fontStyle=1;" edge="1" parent="1" source="port-check" target="ff-action">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LSTM Inference (NO branch) -->
+        <mxCell id="lstm-eval" value="&lt;b&gt;Execute PyTorch LSTM Inference&lt;/b&gt;&lt;br&gt;Input Window L=5 &amp;rarr; Inference Latency 14.8 ms&lt;br&gt;Outputs: Predicted Throughput ρ̂ &amp;amp; Error MSE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#3f51b5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="289" y="340" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="NO (Link Up)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2e7d32;fontColor=#2e7d32;fontStyle=1;" edge="1" parent="1" source="port-check" target="lstm-eval">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Check Cooldown -->
+        <mxCell id="cooldown-check" value="Anti-Flapping Check:&lt;br&gt;Elapsed Time since last reroute &amp;lt; 15.0 s?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#fbc02d;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="284" y="440" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="lstm-eval" target="cooldown-check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Hold Cooldown -->
+        <mxCell id="hold-cooldown" value="&lt;b&gt;HOLD CURRENT STATE&lt;/b&gt;&lt;br&gt;Cooldown Active (Suppress Flapping)&lt;br&gt;Prevent Race Conditions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#f57c00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="600" y="455" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="YES (Hold)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#f57c00;fontColor=#e65100;fontStyle=1;" edge="1" parent="1" source="cooldown-check" target="hold-cooldown">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Congestion Threshold Check -->
+        <mxCell id="cong-check" value="Impending Congestion?&lt;br&gt;ρ̂ &amp;ge; 0.85 OR MSE &amp;gt; 5.0?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#fbc02d;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="294" y="570" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="NO (Cooldown Expired)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2e7d32;fontColor=#2e7d32;fontStyle=1;" edge="1" parent="1" source="cooldown-check" target="cong-check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Proactive Reroute Branch -->
+        <mxCell id="reroute-act" value="&lt;b&gt;PROACTIVE OFFLOAD (Bulk TCP)&lt;/b&gt;&lt;br&gt;• Push FlowMod to s1: Match TCP 5001 &amp;rarr; Output s1-eth4&lt;br&gt;• Priority UDP isolated on Primary (Queue 1)&lt;br&gt;• Bufferbloat prevented | Jitter &amp;lt; 1 ms&lt;br&gt;• Update Last_Reroute_Timestamp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#d32f2f;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="690" width="270" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="YES &amp;amp; State == PRIMARY" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#d32f2f;fontColor=#d32f2f;fontStyle=1;" edge="1" parent="1" source="cong-check" target="reroute-act">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="165" y="615" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Recovery / Failback Check -->
+        <mxCell id="failback-check" value="Traffic Eased?&lt;br&gt;ρ̂ &amp;le; 0.60 &amp;amp;&amp;amp; State == REROUTED?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#fbc02d;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="690" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="NO" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="cong-check" target="failback-check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="615" y="615" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Failback Action -->
+        <mxCell id="failback-act" value="&lt;b&gt;FAILBACK TO PRIMARY LINK&lt;/b&gt;&lt;br&gt;• Push FlowMod to s1: Match TCP 5001 &amp;rarr; Group 200&lt;br&gt;• Re-converge Bulk TCP onto Primary Link&lt;br&gt;• Update Last_Reroute_Timestamp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="500" y="820" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="YES" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2e7d32;fontColor=#2e7d32;fontStyle=1;" edge="1" parent="1" source="failback-check" target="failback-act">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Maintain State -->
+        <mxCell id="maintain-act" value="&lt;b&gt;MAINTAIN ROUTING STATE&lt;/b&gt;&lt;br&gt;Hysteresis deadband (0.60 &amp;lt; ρ̂ &amp;lt; 0.85)&lt;br&gt;No flow modifications needed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#9e9e9e;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="820" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="NO" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#757575;" edge="1" parent="1" source="failback-check" target="maintain-act">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="735" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- End / Sleep -->
+        <mxCell id="sleep-loop" value="&lt;b&gt;SLEEP UNTIL NEXT EPOCH&lt;/b&gt;&lt;br&gt;Wait for (t + 5.0s) or PortStatus Async Event" style="ellipse;whiteSpace=wrap;html=1;fillColor=#cfd8dc;strokeColor=#607d8b;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="289" y="960" width="250" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Convergence arrows to sleep loop -->
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#607d8b;" edge="1" parent="1" source="reroute-act" target="sleep-loop">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="165" y="930" />
+              <mxPoint x="414" y="930" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#607d8b;" edge="1" parent="1" source="maintain-act" target="sleep-loop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#607d8b;" edge="1" parent="1" source="failback-act" target="sleep-loop">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="625" y="930" />
+              <mxPoint x="414" y="930" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#607d8b;" edge="1" parent="1" source="hold-cooldown" target="sleep-loop">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="940" />
+              <mxPoint x="414" y="940" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#607d8b;" edge="1" parent="1" source="ff-action" target="sleep-loop">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="790" y="950" />
+              <mxPoint x="414" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Feedback Loop to Start -->
+        <mxCell id="e17" value="Next Cycle" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2e7d32;dashed=1;" edge="1" parent="1" source="sleep-loop" target="start">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="990" />
+              <mxPoint x="830" y="60" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
