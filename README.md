@@ -20,8 +20,8 @@ Edge computing networks connect heterogeneous Internet of Things (IoT) devices, 
 
 This project implements and evaluates an emulated Software-Defined Networking (SDN) framework designed to address these challenges through:
 * **Switch-Local Fast-Failover:** Using OpenFlow 1.3 Fast-Failover group tables on edge switches to autonomously redirect traffic to pre-configured backup links in the data plane upon carrier signal loss without waiting for controller round-trip communication.
-* **QoS-Aware Traffic Differentiation:** Enforcing traffic classification via IP protocol and DSCP markings, coupled with Linux Hierarchical Token Bucket (HTB) queues to isolate priority traffic from bulk flows.
-* **Predictive AI Telemetry Pipeline:** Periodically collecting switch port statistics (`OFPPortStatsRequest`) to feed a PyTorch Long Short-Term Memory (LSTM) autoencoder model that monitors network utilization patterns.
+* **QoS-Aware Traffic Differentiation Architecture:** Enforcing traffic classification via IP protocol and ports, integrated with Linux Hierarchical Token Bucket (HTB) queues designed to prioritize real-time traffic over bulk transfers.
+* **Predictive AI Telemetry Pipeline:** Periodically collecting switch port statistics (`OFPPortStatsRequest`) to feed a PyTorch Long Short-Term Memory (LSTM) autoencoder model intended for network anomaly detection.
 
 ---
 
@@ -117,10 +117,11 @@ Defined in `scenarios/S3_failure.yaml`:
 ## 4. Implemented Features
 
 * **OpenFlow 1.3 Fast-Failover Groups:** Group tables installed on edge switches (`Group 100` for Priority traffic, `Group 101` for Best-Effort traffic). Bucket 0 watches port 3 (primary path via `s3`), while Bucket 1 watches port 4 (direct backup link to `s2`).
-* **L4 Flow Classification:** Inspects ingress IPv4 packets to extract protocol and destination port:
-  * UDP port 5202 / DSCP 46 $\rightarrow$ Classified as `PRIORITY` (Metadata tag 1, Queue 1).
-  * TCP port 5201 / DSCP 0 $\rightarrow$ Classified as `BEST_EFFORT` (Metadata tag 2, Queue 0).
-* **Linux HTB QoS Enforcement:** Script `mininet/configure_queues.sh` creates Hierarchical Token Bucket queues on edge switch ports to prevent aggressive TCP bulk transfers from starving priority streams.
+* **L4 Flow Classification:** Module `controller/flow_classifier.py` inspects packet headers to assign internal metadata tags:
+  * Traffic matching designated priority profiles (Metadata tag 1 $\rightarrow$ Queue 1).
+  * Standard traffic falls back to default policy (Metadata tag 2 $\rightarrow$ Queue 0 / Group 101).
+  * *(Note: In Scenario S3, both streams routed through Group 101, so independent priority queue isolation was not validated during benchmark failure trials).*
+* **Linux HTB QoS Configuration:** Script `mininet/configure_queues.sh` configures Hierarchical Token Bucket queues on edge switch ports (Queue 0: Best-Effort capped at 4 Mbps; Queue 1: Priority with 8 Mbps guaranteed rate).
 * **REST Management Bridge:** Standalone HTTP server (`controller/ai_sdn_bridge.py`) listening on port 8080 providing operational mode control (`/api/mode`) and liveness monitoring (`/health`).
 * **Automated Scenario Benchmark Runner:** Script `mininet/run_scenario.py` manages namespace command execution, preflight socket verification, failure injection timing, and log collection.
 
@@ -244,24 +245,27 @@ sudo mn -c
 
 ## 7. Measured Results and Empirical Comparison
 
-The table below reflects genuine, audited Mininet measurements collected from live experimental trials (`live_s3_baseline`, `live_s3_reactive`, and `live_calib_003`) under an 8.0-second injected link cut on `s1-eth3`:
+The table below summarizes genuine, audited Mininet measurements collected from live experimental trials (`live_s3_baseline`, `live_s3_reactive`, and `live_calib_003`) under an 8.0-second injected link cut on `s1-eth3`:
 
 | Metric Category | Metric | Baseline (`live_s3_baseline`) | Reactive (`live_s3_reactive`) | Proposed (`live_calib_003`) | Evidence Source |
 | :--- | :--- | :---: | :---: | :---: | :--- |
 | **Physical Outage** | Link Carrier Downtime | **8.015 s** | **8.018 s** | **8.013 s** | `link_failure_events.csv` |
-| **Failover Action** | Switch Datapath Rerouting | None (Bypassed) | OVS Group 101 | OVS Group 101 | `s1_group_stats_recovered.txt` |
-| **Diverted Traffic** | Backup Bucket 1 Forwarded | **0 packets (0.0 MB)** | **2,732 packets (4.01 MB)** | **2,717 packets (4.00 MB)** | `s1_group_stats_recovered.txt` |
+| **Failover Action** | Switch Datapath Rerouting | None (Bypassed) | Switch-Local FF (Group 101) | Switch-Local FF (Group 101) | `s1_group_stats_recovered.txt` |
+| **Diverted Traffic** | Backup Bucket 1 Cumulative | **0 packets (0.0 MB)** | **2,732 packets (4.01 MB)** | **2,717 packets (4.00 MB)** | `s1_group_stats_recovered.txt` |
 | **Priority UDP** | Datagrams Sent / Received | 10,360 / 8,285 | 6,964 / 6,911 | 7,332 / 7,279 | Client JSON / Server Log |
 | **Priority UDP** | Lost Datagrams | **2,075 datagrams** | **53 datagrams** | **53 datagrams** | Server Log final summary |
-| **Priority UDP** | Packet Loss Rate | **20.029%** | **0.761%** | **0.723%** | Reconciled sender/receiver |
+| **Priority UDP** | UDP Packet Loss Rate | **20.029%** | **0.761%** | **0.723%** | Reconciled sender/receiver |
 | **UDP Continuity** | Zero-Throughput Blackout | **7.0 s continuous** | **0 s (Zero blackout)** | **0 s (Zero blackout)** | Server Log interval records |
 | **Bulk TCP** | Retransmissions | **186 segments** | **93 segments** | **93 segments** | Client JSON `sum_sent` |
 | **Liveness Ping** | Consecutive Probes Dropped | **496 drops** | **274 drops** | **272 drops** | Ping Log sequence gaps |
 
-### Key Findings
-1. **Blackout Elimination:** Static shortest path routing suffered a complete 7-second blackout for priority UDP traffic during the 8-second link outage (20.029% datagram loss). In contrast, Fast-Failover maintained packet delivery through all reporting intervals without a blackout (loss rate $\le 0.761\%$).
-2. **Autonomous Hardware Failover:** OpenFlow group counters confirm edge switch `s1` diverted over 2,700 packets (~4.0 MB) over the backup link (`s1-eth4`) autonomously upon carrier loss.
-3. **Datapath Equivalence in Current Code:** In the current repository implementation, `reactive` mode and `full_ai_qos_ff` mode exhibit identical datapath behavior because both configure Fast-Failover groups on the edge switches rather than performing controller-side `OFPFlowMod` path recalculation.
+### Experimental Context and Disclosures
+1. **Sample Size:** Reported metrics reflect **one valid live trial per mode** in the testbed repository.
+2. **Failover Execution:** The reduction in UDP packet loss (from 20.029% to $\approx 0.7\%$) and elimination of multi-second blackout were accomplished by **switch-local OpenFlow 1.3 Fast-Failover** executing in the switch hardware datapath upon carrier loss. AI-triggered proactive rerouting was not demonstrated in these trials, and AI inference did not cause the observed recovery improvement.
+3. **Queue Configuration Discrepancy:** The baseline mode was evaluated with unconfigured/cleared queues (unshaped FIFO), whereas reactive and full modes had active Linux-HTB traffic shaping. Consequently, queuing delays and throughput profiles reflect different queue setups across modes.
+4. **Queue Isolation Scope:** Priority queue isolation was not independently validated because flows in Scenario S3 defaulted to Best-Effort Group 101.
+5. **Group Counter Scope:** The Backup Bucket 1 counter reflects cumulative packets forwarded at the time of the post-recovery snapshot; it does not measure exclusively outage-period traffic.
+6. **Datapath Equivalence:** In the current codebase (`controller/app.py`), both `reactive` and `full_ai_qos_ff` modes install Fast-Failover groups on edge switches rather than performing dynamic controller-driven path recomputation, producing equivalent datapath forwarding.
 
 ---
 
@@ -323,6 +327,7 @@ AI-Driven-QoS-Aware-Predictive-Traffic-Engineering/
 └── scripts/
     ├── run_controller.py                  <- Python entry point for SDN controller
     ├── run_controller.sh                  <- Shell launcher for the controller
+    ├── verify_connectivity.py             <- Preflight socket reachability and forwarding check
     └── evaluate.py                        <- Measurement parser and evaluation harness
 ```
 
@@ -340,10 +345,13 @@ AI-Driven-QoS-Aware-Predictive-Traffic-Engineering/
 
 ## 10. Limitations and Reproducibility Notes
 
-1. **Reactive Mode Implementation:** The current controller implementation (`controller/app.py`) configures Fast-Failover groups for both `reactive` and `full_ai_qos_ff` modes. A controller-driven reactive path recomputation via `OFPFlowMod` upon port-down was not independently implemented.
-2. **AI Predictive Reroute Activation:** In the 45-second link failure scenarios, anomaly scores remained below the threshold ($0.02$) during sudden physical link cuts. Consequently, all failover was executed via switch-local OpenFlow Fast-Failover rather than proactive controller intervention.
-3. **Queue Configuration Discrepancy:** Queue shaping was cleared for `baseline_shortest_path` to reflect unmanaged edge links, while `reactive` and `full_ai_qos_ff` utilized Linux-HTB queue rate limits. This introduces queuing latency differences under load (mean ping RTT ~0.21 ms without queues vs. ~206 ms with queues).
-4. **Ping Cadence Under Load:** When running at high frequency (`-i 0.010`), Linux ping socket pacing slows under concurrent traffic load. Probe drop counts should be evaluated as discrete sequence gaps rather than assuming a continuous 10 ms interval.
+1. **Single Trial Sample Size:** The empirical results reflect a single validated live trial for each controller mode (`live_s3_baseline`, `live_s3_reactive`, and `live_calib_003`). Additional trials are required for formal statistical confidence intervals.
+2. **Switch-Local Failover vs. AI Causality:** All observed failover recovery was executed by switch-local OpenFlow 1.3 Fast-Failover (`Group 101`). Anomaly scores during link cuts did not exceed the detection threshold ($0.02$ MSE), so AI-triggered proactive rerouting was not demonstrated during these trials, and AI inference did not cause the measured loss reduction.
+3. **Reactive Mode Implementation:** The current controller implementation (`controller/app.py`) configures Fast-Failover groups for both `reactive` and `full_ai_qos_ff` modes. Dynamic controller-driven reactive path recomputation via `OFPFlowMod` upon port-down was not independently implemented.
+4. **Queue Configuration Discrepancy:** Queue shaping was cleared for `baseline_shortest_path` to emulate unmanaged edge links, while `reactive` and `full_ai_qos_ff` utilized Linux-HTB queue rate limits. This introduces queuing latency differences under load (mean ping RTT ~0.21 ms without queues vs. ~206 ms with queues).
+5. **Priority Queue Isolation Scope:** Because `flow_classifier.py` designates `10.0.0.3 -> 10.0.0.4` for priority classification, traffic in Scenario S3 (`10.0.0.1 -> 10.0.0.3`) defaulted to Best-Effort Group 101. Independent queue isolation under congestion was therefore not empirically validated.
+6. **Group Statistics Counter Scope:** OpenFlow group statistics (`s1_group_stats_recovered.txt`) represent cumulative datapath counters captured after link restoration; they do not measure traffic restricted exclusively to the 8.0-second failure window.
+7. **Ping Cadence Under Load:** When running at high frequency (`-i 0.010`), Linux ping socket pacing slows under concurrent traffic load. Probe drop counts should be evaluated as discrete sequence gaps rather than assuming a continuous 10 ms interval.
 
 ---
 
