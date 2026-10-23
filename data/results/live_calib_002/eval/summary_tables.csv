@@ -1,0 +1,9 @@
+mode,scenario,flow_type,metric,n,mean,stddev,min,max,p95
+full_ai_qos_ff,S3,bulk_tcp,latency_ms_mean,1,27450.240663900415,0.0,27450.240663900415,27450.240663900415,27450.240663900415
+full_ai_qos_ff,S3,bulk_tcp,latency_ms_p95,1,31266.0,0.0,31266.0,31266.0,31266.0
+full_ai_qos_ff,S3,bulk_tcp,ping_rtt_variation_ms,1,109.80416666666666,0.0,109.80416666666666,109.80416666666666,109.80416666666666
+full_ai_qos_ff,S3,bulk_tcp,throughput_mbps,1,0.0,0.0,0.0,0.0,0.0
+full_ai_qos_ff,S3,bulk_tcp,packet_loss_pct,1,91.2839,0.0,91.2839,91.2839,91.2839
+full_ai_qos_ff,S3,priority_udp,jitter_ms,1,0.0,0.0,0.0,0.0,0.0
+full_ai_qos_ff,S3,priority_udp,throughput_mbps,1,0.0,0.0,0.0,0.0,0.0
+full_ai_qos_ff,S3,priority_udp,packet_loss_pct,1,0.0,0.0,0.0,0.0,0.0

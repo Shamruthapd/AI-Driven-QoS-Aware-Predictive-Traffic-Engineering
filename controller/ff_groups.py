@@ -90,17 +90,6 @@ class FastFailoverGroups(app_manager.OSKenApp):
                 queue_id=self.BEST_EFFORT_QUEUE,
                 desc="BEST_EFFORT"
             )
-        elif dpid == 3:
-            # Core switch group
-            s_gid = self.GROUP_IDS[dpid]["standard"]
-            self._install_ff_group(
-                datapath=datapath,
-                group_id=s_gid,
-                primary_port=p_port,
-                backup_port=b_port,
-                queue_id=None,
-                desc="STANDARD"
-            )
 
     @set_ev_cls(ofp_event.EventOFPPortStatus, MAIN_DISPATCHER)
     def port_status_handler(self, ev):

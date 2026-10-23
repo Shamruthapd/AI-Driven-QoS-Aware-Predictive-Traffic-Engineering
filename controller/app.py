@@ -106,8 +106,16 @@ class AIQoSSDNController(app_manager.OSKenApp):
             ]
         )
 
+        # Drop IPv6 traffic at switch level to prevent triangle multicast storms
+        self.add_flow(
+            datapath=datapath,
+            priority=50,
+            match=parser.OFPMatch(eth_type=ether_types.ETH_TYPE_IPV6),
+            actions=[]
+        )
+
         self.logger.info(
-            "Table-miss flow installed | DPID=%s",
+            "Table-miss and IPv6 drop flows installed | DPID=%s",
             datapath.id
         )
 
@@ -179,59 +187,52 @@ class AIQoSSDNController(app_manager.OSKenApp):
         dst=None,
         traffic_class="BEST_EFFORT"
     ):
+        from controller.ai_sdn_bridge import SHARED_STATE
         dpid = datapath.id
 
-        forced_group = self.FF_DESTINATIONS.get(
-            dpid,
-            {}
-        ).get(dst)
+        # Switch 3 (Core transit switch between s1 and s2)
+        # Port 1 connects to s1 (hosts h1, h2); Port 2 connects to s2 (hosts h3, h4).
+        if dpid == 3:
+            if dst in ("00:00:00:00:00:01", "00:00:00:00:00:02"):
+                self.logger.info("Core s3 transit -> s1 (port 1) | DST=%s", dst)
+                return [parser.OFPActionOutput(1)]
+            elif dst in ("00:00:00:00:00:03", "00:00:00:00:00:04"):
+                self.logger.info("Core s3 transit -> s2 (port 2) | DST=%s", dst)
+                return [parser.OFPActionOutput(2)]
+            return [parser.OFPActionOutput(out_port)]
 
-        if forced_group is not None:
-            self.logger.info(
-                "Fast-Failover forwarding | "
-                "DPID=%s | DST=%s | GROUP=%s",
-                dpid,
-                dst,
-                forced_group
-            )
+        if SHARED_STATE.get("active_mode") == "baseline_shortest_path":
+            return [parser.OFPActionOutput(out_port)]
 
-            return [
-                parser.OFPActionGroup(forced_group)
-            ]
-
-        # Select Fast-Failover group based on traffic class for inter-switch links
-        if dpid == 1 and out_port in self.S1_FF_PORTS:
+        # Switch 1 Fast-Failover: inter-switch traffic destined for s2 hosts (h3, h4)
+        if dpid == 1 and dst in ("00:00:00:00:00:03", "00:00:00:00:00:04"):
             group_id = (
                 self.S1_FF_GROUP_PRIORITY
                 if traffic_class == "PRIORITY"
                 else self.S1_FF_GROUP_BEST_EFFORT
             )
             self.logger.info(
-                "Fast-Failover forwarding | DPID=%s | OUT_PORT=%s | CLASS=%s | GROUP=%s",
-                dpid,
-                out_port,
+                "Fast-Failover forwarding | DPID=1 | DST=%s | CLASS=%s | GROUP=%s",
+                dst,
                 traffic_class,
                 group_id
             )
             return [parser.OFPActionGroup(group_id)]
 
-        elif dpid == 2 and out_port in self.S2_FF_PORTS:
+        # Switch 2 Fast-Failover: inter-switch traffic destined for s1 hosts (h1, h2)
+        if dpid == 2 and dst in ("00:00:00:00:00:01", "00:00:00:00:00:02"):
             group_id = (
                 self.S2_FF_GROUP_PRIORITY
                 if traffic_class == "PRIORITY"
                 else self.S2_FF_GROUP_BEST_EFFORT
             )
             self.logger.info(
-                "Fast-Failover forwarding | DPID=%s | OUT_PORT=%s | CLASS=%s | GROUP=%s",
-                dpid,
-                out_port,
+                "Fast-Failover forwarding | DPID=2 | DST=%s | CLASS=%s | GROUP=%s",
+                dst,
                 traffic_class,
                 group_id
             )
             return [parser.OFPActionGroup(group_id)]
-
-        elif dpid == 3 and out_port in self.S3_FF_PORTS:
-            return [parser.OFPActionGroup(self.S3_FF_GROUP)]
 
         return [
             parser.OFPActionOutput(out_port)
@@ -258,15 +259,12 @@ class AIQoSSDNController(app_manager.OSKenApp):
         dst = eth.dst
         dpid = datapath.id
 
-        if eth.ethertype == ether_types.ETH_TYPE_LLDP:
+        if eth.ethertype in (ether_types.ETH_TYPE_LLDP, ether_types.ETH_TYPE_IPV6):
             return
 
         self.mac_to_port.setdefault(dpid, {})
 
         learn_source = not self.is_multicast_or_broadcast(dst)
-
-        if eth.ethertype == ether_types.ETH_TYPE_IPV6:
-            learn_source = False
 
         if learn_source:
             self.mac_to_port[dpid].setdefault(src, in_port)
@@ -335,17 +333,29 @@ class AIQoSSDNController(app_manager.OSKenApp):
                 classification.reason
             )
 
+        STATIC_EGRESS = {
+            1: {"00:00:00:00:00:01": 1, "00:00:00:00:00:02": 2, "00:00:00:00:00:03": 3, "00:00:00:00:00:04": 3},
+            2: {"00:00:00:00:00:01": 3, "00:00:00:00:00:02": 3, "00:00:00:00:00:03": 1, "00:00:00:00:00:04": 2},
+            3: {"00:00:00:00:00:01": 1, "00:00:00:00:00:02": 1, "00:00:00:00:00:03": 2, "00:00:00:00:00:04": 2},
+        }
+
         if dst in self.mac_to_port[dpid]:
             out_port = self.mac_to_port[dpid][dst]
-
             self.logger.info(
                 "Known destination | DST=%s | OUT_PORT=%s",
                 dst,
                 out_port
             )
+        elif dpid in STATIC_EGRESS and dst in STATIC_EGRESS[dpid]:
+            out_port = STATIC_EGRESS[dpid][dst]
+            self.logger.info(
+                "Topology egress route | DPID=%s | DST=%s | OUT_PORT=%s",
+                dpid,
+                dst,
+                out_port
+            )
         else:
             out_port = ofproto.OFPP_FLOOD
-
             self.logger.info(
                 "Unknown destination | DST=%s | FLOOD",
                 dst
@@ -377,6 +387,7 @@ class AIQoSSDNController(app_manager.OSKenApp):
 
             if classification is not None and ip_pkt is not None:
                 match_fields.update({
+                    "eth_type": ether_types.ETH_TYPE_IP,
                     "ipv4_src": src_ip,
                     "ipv4_dst": dst_ip,
                     "ip_proto": ip_proto,

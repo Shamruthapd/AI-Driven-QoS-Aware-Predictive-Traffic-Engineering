@@ -1,0 +1,13 @@
+source_file,mode,scenario,trial_id,flow_type,valid,invalid_reason,event_count,events_telemetry,events_prediction,events_decision,events_enforcement,events_port_down,events_ff_used,latency_ms_mean,latency_ms_p95,ping_rtt_variation_ms,ping_samples,packet_loss_pct,throughput_mbps,duration_seconds,jitter_ms
+data/results/live_s3_reactive/live_s3_reactive_link_failure_events.csv,reactive,S3,live_s3_reactive_link_failure_events,bulk_tcp,True,,3.0,0.0,0.0,0.0,0.0,0.0,0.0,,,,,,,,
+data/results/live_s3_reactive/live_s3_reactive_preflight_ping_h1_h3.txt,reactive,S3,live_s3_reactive_preflight_ping_h1_h3,bulk_tcp,True,,,,,,,,,2.8830500000000003,5.209500000000036,2.799,20.0,0.0,,,
+data/results/live_s3_reactive/live_s3_reactive_preflight_ping_h2_h4.txt,reactive,S3,live_s3_reactive_preflight_ping_h2_h4,bulk_tcp,True,,,,,,,,,5.1136,5.430350000000071,5.275631578947368,20.0,0.0,,,
+data/results/live_s3_reactive/live_s3_reactive_reactive_S3_failure_flow_bulk_tcp.json,reactive,S3,live_s3_reactive_reactive_S3_failure_flow_bulk_tcp,bulk_tcp,True,,,,,,,,,,,,,,1.9326145838738742,38.522371,
+data/results/live_s3_reactive/live_s3_reactive_reactive_S3_failure_flow_priority_udp.json,reactive,S3,live_s3_reactive_reactive_S3_failure_flow_priority_udp,priority_udp,True,,,,,,,,,,,,,0.7610568638713383,1.973772261112904,40.560416,13.797281027741905
+data/results/live_s3_reactive/live_s3_reactive_reactive_S3_failure_ping.log,reactive,S3,live_s3_reactive_reactive_S3_failure_ping,bulk_tcp,True,,,,,,,,,206.09189803350327,543.0,12.085459912536443,1373.0,16.6363,,,
+data/results/live_s3_reactive/live_s3_reactive_s1_group_stats_during_fail.txt,reactive,S1,live_s3_reactive_s1_group_stats_during_fail,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_reactive/live_s3_reactive_s1_group_stats_pre_fail.txt,reactive,S1,live_s3_reactive_s1_group_stats_pre_fail,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_reactive/live_s3_reactive_s1_group_stats_recovered.txt,reactive,S1,live_s3_reactive_s1_group_stats_recovered,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_reactive/live_s3_reactive_s1_groups_initial.txt,reactive,S1,live_s3_reactive_s1_groups_initial,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_reactive/live_s3_reactive_server_h3_5202.log,reactive,S3,live_s3_reactive_server_h3_5202,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_reactive/live_s3_reactive_server_h4_5201.log,reactive,S3,live_s3_reactive_server_h4_5201,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,

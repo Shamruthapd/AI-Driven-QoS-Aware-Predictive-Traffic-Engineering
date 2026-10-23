@@ -1,0 +1,3 @@
+mode,scenario,flow_type,metric,n,mean,stddev,min,max,p95
+full_ai_qos_ff,S3,bulk_tcp,latency_ms_mean,1,14.4,0.0,14.4,14.4,14.4
+full_ai_qos_ff,S3,bulk_tcp,latency_ms_p95,1,14.4,0.0,14.4,14.4,14.4

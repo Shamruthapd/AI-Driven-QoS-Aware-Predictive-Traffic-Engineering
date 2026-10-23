@@ -1,0 +1,13 @@
+source_file,mode,scenario,trial_id,flow_type,valid,invalid_reason,throughput_mbps,duration_seconds,jitter_ms,packet_loss_pct,latency_ms_mean,latency_ms_p95,ping_rtt_variation_ms,ping_samples,event_count,events_telemetry,events_prediction,events_decision,events_enforcement,events_port_down,events_ff_used
+data/results/live_calib_003/live_calib_003_full_ai_qos_ff_S3_failure_flow_bulk_tcp.json,full_ai_qos_ff,S3,live_calib_003_full_ai_qos_ff_S3_failure_flow_bulk_tcp,bulk_tcp,True,,1.8035245885682794,38.372649,,,,,,,,,,,,,
+data/results/live_calib_003/live_calib_003_full_ai_qos_ff_S3_failure_flow_priority_udp.json,full_ai_qos_ff,S3,live_calib_003_full_ai_qos_ff_S3_failure_flow_priority_udp,priority_udp,True,,2.079057913839356,40.5568,22.32287149490539,0.722858701582106,,,,,,,,,,,
+data/results/live_calib_003/live_calib_003_full_ai_qos_ff_S3_failure_ping.log,full_ai_qos_ff,S3,live_calib_003_full_ai_qos_ff_S3_failure_ping,bulk_tcp,True,,,,,16.4749,205.94177737490935,544.0999999999999,12.126457910014514,1379.0,,,,,,,
+data/results/live_calib_003/live_calib_003_link_failure_events.csv,unknown,unknown,live_calib_003_link_failure_events,bulk_tcp,True,,,,,,,,,,3.0,0.0,0.0,0.0,0.0,0.0,0.0
+data/results/live_calib_003/live_calib_003_preflight_ping_h1_h3.txt,unknown,unknown,live_calib_003_preflight_ping_h1_h3,bulk_tcp,True,,,,,0.0,3.47175,4.665000000000046,3.5159473684210525,20.0,,,,,,,
+data/results/live_calib_003/live_calib_003_preflight_ping_h2_h4.txt,unknown,unknown,live_calib_003_preflight_ping_h2_h4,bulk_tcp,True,,,,,0.0,8.0609,8.557050000000112,8.393315789473684,20.0,,,,,,,
+data/results/live_calib_003/live_calib_003_s1_group_stats_during_fail.txt,unknown,S1,live_calib_003_s1_group_stats_during_fail,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_calib_003/live_calib_003_s1_group_stats_pre_fail.txt,unknown,S1,live_calib_003_s1_group_stats_pre_fail,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_calib_003/live_calib_003_s1_group_stats_recovered.txt,unknown,S1,live_calib_003_s1_group_stats_recovered,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_calib_003/live_calib_003_s1_groups_initial.txt,unknown,S1,live_calib_003_s1_groups_initial,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_calib_003/live_calib_003_server_h3_5202.log,unknown,unknown,live_calib_003_server_h3_5202,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_calib_003/live_calib_003_server_h4_5201.log,unknown,unknown,live_calib_003_server_h4_5201,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,

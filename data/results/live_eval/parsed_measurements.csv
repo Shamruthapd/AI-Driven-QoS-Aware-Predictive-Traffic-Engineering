@@ -1,0 +1,4 @@
+source_file,mode,scenario,trial_id,flow_type,valid,invalid_reason,latency_ms_mean,latency_ms_p95,ping_samples
+data/results/live_raw/live_calib_001_full_ai_qos_ff_S3_failure_flow_bulk_tcp.json,full_ai_qos_ff,S3,live_calib_001_full_ai_qos_ff_S3_failure_flow_bulk_tcp,bulk_tcp,False,no supported metrics parsed,,,
+data/results/live_raw/live_calib_001_full_ai_qos_ff_S3_failure_flow_priority_udp.json,full_ai_qos_ff,S3,live_calib_001_full_ai_qos_ff_S3_failure_flow_priority_udp,priority_udp,False,no supported metrics parsed,,,
+data/results/live_raw/live_calib_001_full_ai_qos_ff_S3_failure_ping.log,full_ai_qos_ff,S3,live_calib_001_full_ai_qos_ff_S3_failure_ping,bulk_tcp,True,,14.4,14.4,1.0

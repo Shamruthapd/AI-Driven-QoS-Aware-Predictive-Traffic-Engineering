@@ -1,0 +1,6 @@
+source_file,mode,scenario,trial_id,flow_type,valid,invalid_reason,throughput_mbps,duration_seconds,jitter_ms,packet_loss_pct,latency_ms_mean,latency_ms_p95,ping_rtt_variation_ms,ping_samples
+data/results/live_calib_002/live_calib_002_full_ai_qos_ff_S3_failure_flow_bulk_tcp.json,full_ai_qos_ff,S3,live_calib_002_full_ai_qos_ff_S3_failure_flow_bulk_tcp,bulk_tcp,True,,0.0,0.0,,,,,,
+data/results/live_calib_002/live_calib_002_full_ai_qos_ff_S3_failure_flow_priority_udp.json,full_ai_qos_ff,S3,live_calib_002_full_ai_qos_ff_S3_failure_flow_priority_udp,priority_udp,True,,0.0,0.0,0.0,0.0,,,,
+data/results/live_calib_002/live_calib_002_full_ai_qos_ff_S3_failure_ping.log,full_ai_qos_ff,S3,live_calib_002_full_ai_qos_ff_S3_failure_ping,bulk_tcp,True,,,,,91.2839,27450.240663900415,31266.0,109.80416666666666,241.0
+data/results/live_calib_002/live_calib_002_s1_group_stats_recovered.txt,unknown,S1,live_calib_002_s1_group_stats_recovered,bulk_tcp,False,no supported metrics parsed,,,,,,,,
+data/results/live_calib_002/live_calib_002_s1_groups_initial.txt,unknown,S1,live_calib_002_s1_groups_initial,bulk_tcp,False,no supported metrics parsed,,,,,,,,

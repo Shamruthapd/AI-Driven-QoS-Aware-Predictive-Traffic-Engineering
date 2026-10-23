@@ -1,0 +1,13 @@
+source_file,mode,scenario,trial_id,flow_type,valid,invalid_reason,throughput_mbps,duration_seconds,jitter_ms,packet_loss_pct,latency_ms_mean,latency_ms_p95,ping_rtt_variation_ms,ping_samples,event_count,events_telemetry,events_prediction,events_decision,events_enforcement,events_port_down,events_ff_used
+data/results/live_s3_baseline/live_s3_baseline_baseline_shortest_path_S3_failure_flow_bulk_tcp.json,baseline_shortest_path,S3,live_s3_baseline_baseline_shortest_path_S3_failure_flow_bulk_tcp,bulk_tcp,True,,5.013267526822007,38.067155,,,,,,,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_baseline_shortest_path_S3_failure_flow_priority_udp.json,baseline_shortest_path,S3,live_s3_baseline_baseline_shortest_path_S3_failure_flow_priority_udp,priority_udp,True,,2.3979335086391345,40.023395,0.43718860589205055,20.02895752895753,,,,,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_baseline_shortest_path_S3_failure_ping.log,baseline_shortest_path,S3,live_s3_baseline_baseline_shortest_path_S3_failure_ping,bulk_tcp,True,,,,,11.9116,0.2101818429661941,0.9952499999999982,0.3259664575947641,3668.0,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_link_failure_events.csv,unknown,S3,live_s3_baseline_link_failure_events,bulk_tcp,True,,,,,,,,,,3.0,0.0,0.0,0.0,0.0,0.0,0.0
+data/results/live_s3_baseline/live_s3_baseline_preflight_ping_h1_h3.txt,unknown,S3,live_s3_baseline_preflight_ping_h1_h3,bulk_tcp,True,,,,,0.0,4.143050000000001,5.499000000000056,4.193894736842105,20.0,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_preflight_ping_h2_h4.txt,unknown,S3,live_s3_baseline_preflight_ping_h2_h4,bulk_tcp,True,,,,,0.0,4.1876,6.160000000000055,4.201894736842106,20.0,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_s1_group_stats_during_fail.txt,unknown,S1,live_s3_baseline_s1_group_stats_during_fail,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_s1_group_stats_pre_fail.txt,unknown,S1,live_s3_baseline_s1_group_stats_pre_fail,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_s1_group_stats_recovered.txt,unknown,S1,live_s3_baseline_s1_group_stats_recovered,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_s1_groups_initial.txt,unknown,S1,live_s3_baseline_s1_groups_initial,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_server_h3_5202.log,unknown,S3,live_s3_baseline_server_h3_5202,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,
+data/results/live_s3_baseline/live_s3_baseline_server_h4_5201.log,unknown,S3,live_s3_baseline_server_h4_5201,bulk_tcp,False,no supported metrics parsed,,,,,,,,,,,,,,,

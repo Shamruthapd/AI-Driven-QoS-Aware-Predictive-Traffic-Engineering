@@ -8,6 +8,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from os_ken.base import app_manager
+from controller.ai_sdn_bridge import start_bridge_server
 
 APPLICATIONS = [
     "os_ken.controller.ofp_handler",
@@ -45,6 +46,7 @@ def main():
     print("[controller] Starting OS-Ken; press Ctrl+C to stop.", flush=True)
 
     patch_hub_thread_kill()
+    start_bridge_server("0.0.0.0", 8080)
 
     try:
         app_manager.AppManager.run_apps(APPLICATIONS)
