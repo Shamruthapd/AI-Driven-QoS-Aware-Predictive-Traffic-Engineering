@@ -1,0 +1,8 @@
+timestamp,dpid,port,event_note,actual_anomaly,mse,threshold,predicted_anomaly
+2026-10-18 04:00:10+00:00,1,1,Physical link failure s1-s2 down (Start),1,4214.1181640625,5.0,1
+2026-10-18 04:00:15+00:00,1,1,Active link down outage window 1,1,98069.9609375,5.0,1
+2026-10-18 04:00:20+00:00,1,1,Active link down outage window 2,1,126479.4609375,5.0,1
+2026-10-18 04:00:25+00:00,1,1,Link restored (End of anomaly),0,0.08827948570251465,5.0,0
+2026-10-18 04:00:30+00:00,1,1,Post-recovery normal traffic 1,0,0.5322702527046204,5.0,0
+2026-10-18 04:00:35+00:00,1,1,Post-recovery normal traffic 2,0,1.1824160814285278,5.0,0
+2026-10-18 04:00:40+00:00,1,1,Post-recovery normal traffic 3,0,2.2243080139160156,5.0,0
