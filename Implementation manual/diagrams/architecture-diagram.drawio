@@ -1,0 +1,126 @@
+<mxfile host="app.diagrams.net" agent="Antigravity">
+  <diagram id="SDN_AI_Architecture" name="System Architecture">
+    <mxGraphModel dx="1762" dy="972" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title_banner" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#0f172a;fontColor=#ffffff;fontSize=15;fontStyle=1;align=center;" value="AI-Driven QoS-Aware Predictive Traffic Engineering &amp; Self-Healing in SDN-Based Edge Networks&#xa;Three-Tier Closed-Loop System Architecture (Release v1.0)" vertex="1">
+          <mxGeometry height="50" width="1200" x="50" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="tier_ai" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f3ff;strokeColor=#8b5cf6;strokeWidth=2;fontColor=#5b21b6;fontSize=13;fontStyle=1;startSize=30;rounded=1;" value="TIER 1: APPLICATION &amp; AI PLANE (PyTorch Runtime Engine)" vertex="1">
+          <mxGeometry height="190" width="1200" x="50" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ai_preproc" parent="tier_ai" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#c4b5fd;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=8;" value="&lt;b&gt;Telemetry Preprocessor&lt;/b&gt;&lt;br&gt;&lt;i&gt;(ai-model/ai_loop.py)&lt;/i&gt;&lt;hr&gt;• 5-Second Telemetry Ingestion&lt;br&gt;• Sliding Window Buffer (&lt;b&gt;W = 12 steps&lt;/b&gt;)&lt;br&gt;• Feature Scaling &amp;amp; Delta Tx/Rx Bytes&lt;br&gt;• Missing Counter Smoothing" vertex="1">
+          <mxGeometry height="125" width="250" x="30" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ai_lstm" parent="tier_ai" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#c4b5fd;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=8;" value="&lt;b&gt;PyTorch LSTM Forecaster&lt;/b&gt;&lt;br&gt;&lt;i&gt;(checkpoints/lstm_model.pt)&lt;/i&gt;&lt;hr&gt;• 2-Layer Recurrent LSTM Network&lt;br&gt;• &lt;b&gt;Inference Latency: 14.8 ms&lt;/b&gt;&lt;br&gt;• Forecast Horizon: 15–30s ahead&lt;br&gt;• Predicts Port Bandwidth Utilization" vertex="1">
+          <mxGeometry height="125" width="250" x="340" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ai_anomaly" parent="tier_ai" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#c4b5fd;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=8;" value="&lt;b&gt;Statistical Anomaly Detector&lt;/b&gt;&lt;br&gt;&lt;i&gt;(ai-model/ai_loop.py)&lt;/i&gt;&lt;hr&gt;• Residual Analysis (Actual vs Pred)&lt;br&gt;• MSE Threshold Triggering&lt;br&gt;• Sudden Spike / Silence Detection&lt;br&gt;• Pre-Congestion Alert Generator" vertex="1">
+          <mxGeometry height="125" width="240" x="640" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ai_healing" parent="tier_ai" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#c4b5fd;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=8;" value="&lt;b&gt;Self-Healing Decision Engine&lt;/b&gt;&lt;br&gt;&lt;i&gt;(self_healing_module.py)&lt;/i&gt;&lt;hr&gt;• Congestion Saturation Check (&amp;gt;85%)&lt;br&gt;• &lt;b&gt;15s Cooldown Timer &amp;amp; Hysteresis&lt;/b&gt;&lt;br&gt;• Anti-Route Oscillation Logic&lt;br&gt;• Generates &lt;b&gt;PROACTIVE_REROUTE_BULK&lt;/b&gt;" vertex="1">
+          <mxGeometry height="125" width="240" x="930" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ai_e1" edge="1" parent="tier_ai" source="ai_preproc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=2;fontSize=10;fontColor=#5b21b6;" target="ai_lstm" value="Normalized Window">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ai_e2" edge="1" parent="tier_ai" source="ai_lstm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=2;fontSize=10;fontColor=#5b21b6;" target="ai_anomaly" value="Predictions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ai_e3" edge="1" parent="tier_ai" source="ai_anomaly" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=2;fontSize=10;fontColor=#5b21b6;" target="ai_healing" value="Alert / Forecast">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bus_nb_stats" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;fillColor=#e9d5ff;strokeColor=#9333ea;fontSize=11;fontColor=#581c87;align=center;" value="&lt;b&gt;Northbound Telemetry Stream&lt;/b&gt; (JSON / REST API / Unix Socket)&#xa;Tx/Rx Bytes, Drop Counters, Port Carrier Status Polled Every 5.0 Seconds">
+          <mxGeometry height="70" width="100" x="180" y="280" as="geometry">
+            <mxPoint x="240" y="350" as="sourcePoint" />
+            <mxPoint x="240" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bus_nb_cmd" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;fillColor=#fbcfe8;strokeColor=#db2777;fontSize=11;fontColor=#831843;align=center;" value="&lt;b&gt;Northbound AI Directives&lt;/b&gt; (REST Post / IPC)&#xa;Trigger: Proactive Bulk Flow Offload (Route to Secondary Link)">
+          <mxGeometry height="70" width="100" x="970" y="280" as="geometry">
+            <mxPoint x="1050" y="280" as="sourcePoint" />
+            <mxPoint x="1050" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tier_ctrl" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f0f9ff;strokeColor=#0284c7;strokeWidth=2;fontColor=#0369a1;fontSize=13;fontStyle=1;startSize=30;rounded=1;" value="TIER 2: CONTROL PLANE (OS-Ken / Ryu SDN Controller - OpenFlow 1.3)" vertex="1">
+          <mxGeometry height="210" width="1200" x="50" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_bridge" parent="tier_ctrl" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7dd3fc;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=8;" value="&lt;b&gt;AI-SDN REST Bridge&lt;/b&gt;&lt;br&gt;&lt;i&gt;(controller/ai_sdn_bridge.py)&lt;/i&gt;&lt;hr&gt;• REST Endpoint: &lt;b&gt;http://127.0.0.1:8080&lt;/b&gt;&lt;br&gt;• Exports Structured Switch Metrics&lt;br&gt;• Dispatches Layer-2 AI Reroute Orders&lt;br&gt;• Master Unified Event Timeline Logger" vertex="1">
+          <mxGeometry height="145" width="260" x="30" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_classifier" parent="tier_ctrl" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7dd3fc;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=8;" value="&lt;b&gt;QoS Flow Classifier&lt;/b&gt;&lt;br&gt;&lt;i&gt;(controller/flow_classifier.py)&lt;/i&gt;&lt;hr&gt;• Inspects IPv4 DSCP &amp;amp; L4 UDP/TCP Ports&lt;br&gt;• &lt;b&gt;Voice/Video (UDP 5001/5002)&lt;/b&gt; → Queue 1&lt;br&gt;• &lt;b&gt;Bulk Data (TCP 5201)&lt;/b&gt; → Queue 0&lt;br&gt;• Injects OpenFlow Metadata Flow Tags&lt;br&gt;• Priority Isolation Safeguards" vertex="1">
+          <mxGeometry height="145" width="260" x="330" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_ff" parent="tier_ctrl" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7dd3fc;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=8;" value="&lt;b&gt;Fast-Failover Group Manager&lt;/b&gt;&lt;br&gt;&lt;i&gt;(controller/ff_groups.py)&lt;/i&gt;&lt;hr&gt;• Installs &lt;b&gt;OFPGT_FF&lt;/b&gt; Groups 100 &amp;amp; 200&lt;br&gt;• &lt;b&gt;Bucket 0 (Primary):&lt;/b&gt; watch_port=3, Q1&lt;br&gt;• &lt;b&gt;Bucket 1 (Backup):&lt;/b&gt; watch_port=4, Q1&lt;br&gt;• &lt;b&gt;Queue Preservation:&lt;/b&gt; set_queue in BOTH!&lt;br&gt;• Zero-Loss Hardware Liveness Monitoring" vertex="1">
+          <mxGeometry height="145" width="260" x="630" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_telemetry" parent="tier_ctrl" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7dd3fc;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=8;" value="&lt;b&gt;OpenFlow 1.3 Core &amp;amp; Modes&lt;/b&gt;&lt;br&gt;&lt;i&gt;(controller/app.py &amp;amp; modes.py)&lt;/i&gt;&lt;hr&gt;• 3 Operational Modes Switcher:&lt;br&gt;  1. &lt;i&gt;static_shortest_path&lt;/i&gt;&lt;br&gt;  2. &lt;i&gt;reactive_sdn&lt;/i&gt;&lt;br&gt;  3. &lt;b&gt;full_ai_qos_ff (Proposed)&lt;/b&gt;&lt;br&gt;• OFPPortStatsRequest Polling Loop&lt;br&gt;• Asynchronous OFPPortStatus Handler" vertex="1">
+          <mxGeometry height="145" width="240" x="930" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_e1" edge="1" parent="tier_ctrl" source="ctrl_bridge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0284c7;strokeWidth=2;fontSize=10;fontColor=#0369a1;" target="ctrl_classifier" value="Flow Rules">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_e2" edge="1" parent="tier_ctrl" source="ctrl_classifier" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0284c7;strokeWidth=2;fontSize=10;fontColor=#0369a1;" target="ctrl_ff" value="Group Setup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_e3" edge="1" parent="tier_ctrl" source="ctrl_ff" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0284c7;strokeWidth=2;fontSize=10;fontColor=#0369a1;" target="ctrl_telemetry" value="Dispatch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bus_sb_down" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;fillColor=#bae6fd;strokeColor=#0284c7;fontSize=11;fontColor=#0369a1;align=center;" value="&lt;b&gt;Southbound OpenFlow 1.3 Control Channel (TCP Port 6633)&lt;/b&gt;&#xa;FlowMod (Table-Miss, DSCP/Port Match) &amp;amp; GroupMod (Fast-Failover Buckets Provisioning)">
+          <mxGeometry height="60" width="100" x="250" y="560" as="geometry">
+            <mxPoint x="380" y="560" as="sourcePoint" />
+            <mxPoint x="380" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bus_sb_up" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;fillColor=#bae6fd;strokeColor=#0284c7;fontSize=11;fontColor=#0369a1;align=center;" value="&lt;b&gt;Southbound Telemetry &amp;amp; Liveness&lt;/b&gt;&#xa;OFPPortStatsReply (Periodic Tx/Rx) &amp;amp; Asynchronous OFPPortStatus (Carrier Down Events)">
+          <mxGeometry height="60" width="100" x="880" y="560" as="geometry">
+            <mxPoint x="980" y="620" as="sourcePoint" />
+            <mxPoint x="980" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tier_data" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;fontColor=#15803d;fontSize=13;fontStyle=1;startSize=30;rounded=1;" value="TIER 3: DATA PLANE (Mininet 2.3.1 Emulation + Open vSwitch 2.17+ with Linux HTB QoS Queues)" vertex="1">
+          <mxGeometry height="330" width="1200" x="50" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="sw_s1" parent="tier_data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#86efac;strokeWidth=1.5;fontSize=10.5;align=left;spacingLeft=6;" value="&lt;b&gt;Edge Ingress Switch (s1)&lt;/b&gt;&lt;hr&gt;• &lt;b&gt;FF Group 100 Installed&lt;/b&gt;&lt;br&gt;  - Bucket 0: watch_port=3 (to s3)&lt;br&gt;  - Bucket 1: watch_port=4 (to s2)&lt;br&gt;• &lt;b&gt;Linux HTB Queues Attached:&lt;/b&gt;&lt;br&gt;  - Queue 0: Bulk Max 4.0 Mbps&lt;br&gt;  - Queue 1: Priority 8.0-10.0 Mbps&lt;br&gt;• &lt;b style=&#39;color:#b91c1c;&#39;&gt;Switch-Local Recovery: 41.0 ms&lt;/b&gt;" vertex="1">
+          <mxGeometry height="150" width="270" x="40" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="sw_s3" parent="tier_data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#86efac;strokeWidth=1.5;fontSize=10.5;align=left;spacingLeft=6;" value="&lt;b&gt;Core Backbone Switch (s3)&lt;/b&gt;&lt;hr&gt;• High-Capacity Core Transit Trunk&lt;br&gt;• s3-eth1 &amp;lt;---&amp;gt; s1-eth3 (100 Mbps)&lt;br&gt;• s3-eth2 &amp;lt;---&amp;gt; s2-eth3 (100 Mbps)&lt;br&gt;• Standard L2/L3 OpenFlow Forwarding&lt;br&gt;• Zero Controller Overhead in Transit" vertex="1">
+          <mxGeometry height="150" width="250" x="480" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="sw_s2" parent="tier_data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#86efac;strokeWidth=1.5;fontSize=10.5;align=left;spacingLeft=6;" value="&lt;b&gt;Edge Egress Switch (s2)&lt;/b&gt;&lt;hr&gt;• &lt;b&gt;FF Group 200 Installed&lt;/b&gt;&lt;br&gt;  - Bucket 0: watch_port=3 (to s3)&lt;br&gt;  - Bucket 1: watch_port=4 (to s1)&lt;br&gt;• &lt;b&gt;Linux HTB Queues Attached:&lt;/b&gt;&lt;br&gt;  - Queue 0: Bulk Max 4.0 Mbps&lt;br&gt;  - Queue 1: Priority 8.0-10.0 Mbps&lt;br&gt;• &lt;b style=&#39;color:#b91c1c;&#39;&gt;Switch-Local Recovery: 41.0 ms&lt;/b&gt;" vertex="1">
+          <mxGeometry height="150" width="270" x="890" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="path_primary1" edge="1" parent="tier_data" source="sw_s1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0284c7;strokeWidth=3.5;fontSize=10;fontColor=#0369a1;align=center;" target="sw_s3" value="&lt;b&gt;Primary Path Link A&lt;/b&gt;&#xa;s1-eth3 &lt;=&gt; s3-eth1 (100 Mbps)&#xa;QoS Queues: Q0 &amp;amp; Q1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="path_primary2" edge="1" parent="tier_data" source="sw_s3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0284c7;strokeWidth=3.5;fontSize=10;fontColor=#0369a1;align=center;" target="sw_s2" value="&lt;b&gt;Primary Path Link B&lt;/b&gt;&#xa;s3-eth2 &lt;=&gt; s2-eth3 (100 Mbps)&#xa;QoS Queues: Q0 &amp;amp; Q1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="path_backup" edge="1" parent="tier_data" source="sw_s1" style="edgeStyle=orthogonalEdgeStyle;curved=1;html=1;strokeColor=#ea580c;strokeWidth=3;strokeDasharray=4 4;fontSize=10;fontColor=#c2410c;align=center;" target="sw_s2" value="&lt;b&gt;Redundant Direct Link (100 Mbps)&lt;/b&gt; — s1-eth4 &lt;=&gt; s2-eth4&#xa;OpenFlow Fast-Failover Alternate Bucket &amp;amp; AI Layer-2 Proactive Bulk Offload Bypass (Q0 &amp;amp; Q1 Preserved)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="175" y="225" />
+              <mxPoint x="1025" y="225" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="host_s1" parent="tier_data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=6;" value="&lt;b&gt;Traffic Sinks / Sources (s1 Hosts):&lt;/b&gt;&lt;br&gt;• &lt;b&gt;h1 (10.0.0.1)&lt;/b&gt;: VoIP/Video Real-Time UDP (Port 5001/5002)&lt;br&gt;• &lt;b&gt;h2 (10.0.0.2)&lt;/b&gt;: Bulk Elephant TCP Transfers (Port 5201)" vertex="1">
+          <mxGeometry height="65" width="270" x="40" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_h1" edge="1" parent="tier_data" source="host_s1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#10b981;strokeWidth=2;" target="sw_s1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="host_s2" parent="tier_data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=6;" value="&lt;b&gt;Traffic Sinks / Sources (s2 Hosts):&lt;/b&gt;&lt;br&gt;• &lt;b&gt;h3 (10.0.0.3)&lt;/b&gt;: VoIP/Video Real-Time UDP (Port 5001/5002)&lt;br&gt;• &lt;b&gt;h4 (10.0.0.4)&lt;/b&gt;: Bulk Elephant TCP Transfers (Port 5201)" vertex="1">
+          <mxGeometry height="65" width="270" x="890" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_h2" edge="1" parent="tier_data" source="host_s2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#10b981;strokeWidth=2;" target="sw_s2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="callout_result" parent="tier_data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#f97316;strokeWidth=1.5;fontSize=10.5;fontColor=#9a3412;align=center;" value="&lt;b&gt;BENCHMARKED PERFORMANCE GAINS (45 Trials):&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Hardware Fast-Failover:&lt;/b&gt; 41.0 ms (37.4x faster than Reactive SDN) | &lt;b&gt;Packet Loss:&lt;/b&gt; 0.5% (vs 19.1%)&lt;br&gt;• &lt;b&gt;AI Congestion Self-Healing:&lt;/b&gt; Priority Latency 7.6 ms (84% drop) | &lt;b&gt;Goodput:&lt;/b&gt; +129% (9.4 Mbps)" vertex="1">
+          <mxGeometry height="65" width="480" x="360" y="245" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,147 @@
+<mxfile host="app.diagrams.net" agent="Antigravity">
+  <diagram id="Runtime_Decision_Flow" name="Operational Workflow">
+    <mxGraphModel dx="1422" dy="890" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title Banner -->
+        <mxCell id="flow_title" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#0f172a;fontColor=#ffffff;fontSize=15;fontStyle=1;align=center;" value="AI-Driven QoS-Aware Traffic Engineering &amp; Self-Healing&#xa;Operational Workflow: Runtime Closed-Loop Decision Cycle" vertex="1">
+          <mxGeometry height="50" width="1000" x="50" y="20" as="geometry" />
+        </mxCell>
+
+        <!-- Start Node -->
+        <mxCell id="node_start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#10b981;strokeColor=#059669;fontColor=#ffffff;fontSize=13;fontStyle=1;" value="START MONITORING&#xa;(5s Telemetry Interval)" vertex="1">
+          <mxGeometry height="60" width="220" x="440" y="95" as="geometry" />
+        </mxCell>
+
+        <!-- Step 1: Telemetry Collection -->
+        <mxCell id="node_step1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f9ff;strokeColor=#0284c7;strokeWidth=2;fontSize=11.5;align=left;spacingLeft=10;" value="&lt;b style='font-size:12px;color:#0369a1;'&gt;Step 1: Collect Data-Plane Telemetry&lt;/b&gt;&lt;br&gt;• Controller polls OVS switches via &lt;b&gt;OFPPortStatsRequest&lt;/b&gt;&lt;br&gt;• Records Tx/Rx byte counters, packet rates, and drop rates&lt;br&gt;• Edge switches listen for asynchronous &lt;b&gt;OFPPortStatus&lt;/b&gt;" vertex="1">
+          <mxGeometry height="80" width="460" x="320" y="185" as="geometry" />
+        </mxCell>
+
+        <!-- Step 2: AI Preprocessing & LSTM -->
+        <mxCell id="node_step2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f3ff;strokeColor=#8b5cf6;strokeWidth=2;fontSize=11.5;align=left;spacingLeft=10;" value="&lt;b style='font-size:12px;color:#6d28d9;'&gt;Step 2: AI Preprocessing &amp;amp; LSTM Forecasting&lt;/b&gt;&lt;br&gt;• Preprocessor updates rolling window buffer (&lt;b&gt;W = 12 steps = 60s&lt;/b&gt;)&lt;br&gt;• PyTorch LSTM generates near-future forecast (&lt;b&gt;14.8 ms latency&lt;/b&gt;)&lt;br&gt;• Anomaly detector checks prediction residuals (MSE metric)" vertex="1">
+          <mxGeometry height="80" width="460" x="320" y="295" as="geometry" />
+        </mxCell>
+
+        <!-- Decision 1: Physical Link Failure? -->
+        <mxCell id="dec_failure" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;strokeWidth=2;fontColor=#b91c1c;fontSize=12;fontStyle=1;align=center;" value="Hard Physical&#xa;Link Down / Carrier Loss&#xa;Detected?" vertex="1">
+          <mxGeometry height="110" width="260" x="420" y="405" as="geometry" />
+        </mxCell>
+
+        <!-- Branch Layer 1: Fast Failover -->
+        <mxCell id="act_failover" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#b91c1c;strokeWidth=2;fontSize=11;align=left;spacingLeft=8;" value="&lt;b style='font-size:12px;color:#991b1b;'&gt;Layer 1: Switch-Local Fast-Failover (FF)&lt;/b&gt;&lt;br&gt;• Hardware carrier loss triggers OVS group table&lt;br&gt;• Edge switch immediately activates &lt;b&gt;Bucket 1&lt;/b&gt;&lt;br&gt;• Traverses backup direct link (&lt;b&gt;s1-eth4 &lt;=&gt; s2-eth4&lt;/b&gt;)&lt;br&gt;• &lt;b&gt;Queue Preservation:&lt;/b&gt; set_queue(1) retained&lt;br&gt;• &lt;b style='color:#b91c1c;'&gt;Zero controller round-trip | Recovery: 41.0 ms&lt;/b&gt;" vertex="1">
+          <mxGeometry height="105" width="290" x="760" y="407.5" as="geometry" />
+        </mxCell>
+
+        <!-- Decision 2: Predictive Congestion? -->
+        <mxCell id="dec_congestion" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#f59e0b;strokeWidth=2;fontColor=#b45309;fontSize=12;fontStyle=1;align=center;" value="LSTM Forecast:&#xa;Link Congestion Predicted?&#xa;(Predicted Util &gt; 85%)" vertex="1">
+          <mxGeometry height="110" width="260" x="420" y="555" as="geometry" />
+        </mxCell>
+
+        <!-- Decision 3: Cooldown Active? -->
+        <mxCell id="dec_cooldown" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontColor=#92400e;fontSize=11.5;fontStyle=1;align=center;" value="Is 15s Cooldown&#xa;Timer Active?&#xa;(Anti-Route Flapping)" vertex="1">
+          <mxGeometry height="90" width="220" x="120" y="565" as="geometry" />
+        </mxCell>
+
+        <!-- Branch Layer 2: Proactive QoS Rerouting -->
+        <mxCell id="act_qos" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#ca8a04;strokeWidth=2;fontSize=11;align=left;spacingLeft=8;" value="&lt;b style='font-size:12px;color:#854d0e;'&gt;Layer 2: Proactive AI Traffic Engineering&lt;/b&gt;&lt;br&gt;• AI engine issues &lt;b&gt;PROACTIVE_REROUTE_BULK&lt;/b&gt;&lt;br&gt;• Controller modifies flow table: bulk TCP shifted to Port 4&lt;br&gt;• Priority UDP (VoIP/Video) remains pinned on Queue 1&lt;br&gt;• Rate limits bulk flows to 4.0 Mbps ceiling on Queue 0&lt;br&gt;• &lt;b style='color:#854d0e;'&gt;Resets 15-second anti-oscillation cooldown timer&lt;/b&gt;" vertex="1">
+          <mxGeometry height="105" width="310" x="70" y="700" as="geometry" />
+        </mxCell>
+
+        <!-- State Normal / Baseline Forwarding -->
+        <mxCell id="act_normal" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;fontSize=11.5;align=left;spacingLeft=8;" value="&lt;b style='font-size:12px;color:#15803d;'&gt;Nominal Transmission State&lt;/b&gt;&lt;br&gt;• Traffic flows along nominal primary path (&lt;b&gt;s1-s3-s2&lt;/b&gt;)&lt;br&gt;• Queue 1 reserves 8-10 Mbps for VoIP/Video streams&lt;br&gt;• Queue 0 serves elastic bulk background flows" vertex="1">
+          <mxGeometry height="75" width="360" x="370" y="715" as="geometry" />
+        </mxCell>
+
+        <!-- Step 5: Master Metrics Logging -->
+        <mxCell id="node_step5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#64748b;strokeWidth=2;fontSize=11.5;align=left;spacingLeft=10;" value="&lt;b style='font-size:12px;color:#334155;'&gt;Step 5: Telemetry Synchronization &amp;amp; Metric Logging&lt;/b&gt;&lt;br&gt;• Logs per-trial statistics into &lt;b&gt;unified_event_log.csv&lt;/b&gt; &amp;amp; &lt;b&gt;week11_summary_tables.csv&lt;/b&gt;&lt;br&gt;• Computes end-to-end latency (7.6 ms), jitter (1.2 ms), packet loss (0.12%), and goodput (9.4 Mbps)&lt;br&gt;• Controller state sync complete; awaits next 5s timer tick" vertex="1">
+          <mxGeometry height="80" width="600" x="250" y="850" as="geometry" />
+        </mxCell>
+
+        <!-- Connector Edges -->
+        <mxCell id="e_start_to_step1" edge="1" parent="1" source="node_start" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0f172a;strokeWidth=2;" target="node_step1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_step1_to_step2" edge="1" parent="1" source="node_step1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0f172a;strokeWidth=2;" target="node_step2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_step2_to_fail" edge="1" parent="1" source="node_step2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0f172a;strokeWidth=2;" target="dec_failure">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Failure = YES -->
+        <mxCell id="e_fail_yes" edge="1" parent="1" source="dec_failure" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#dc2626;strokeWidth=2.5;fontColor=#dc2626;fontSize=11;fontStyle=1;" target="act_failover" value="YES&#xa;(Carrier Lost)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Failure = NO -->
+        <mxCell id="e_fail_no" edge="1" parent="1" source="dec_failure" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;fontColor=#059669;fontSize=11;fontStyle=1;" target="dec_congestion" value="NO&#xa;(Links Active)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Congestion = YES -->
+        <mxCell id="e_cong_yes" edge="1" parent="1" source="dec_congestion" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d97706;strokeWidth=2;fontColor=#d97706;fontSize=11;fontStyle=1;" target="dec_cooldown" value="YES&#xa;(Pred Util &gt; 85%)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cooldown = EXPIRED (Apply QoS Reroute) -->
+        <mxCell id="e_cool_no" edge="1" parent="1" source="dec_cooldown" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d97706;strokeWidth=2;fontColor=#d97706;fontSize=11;fontStyle=1;" target="act_qos" value="EXPIRED&#xa;(&gt; 15 seconds)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cooldown = ACTIVE (Suppress flapping) -->
+        <mxCell id="e_cool_yes" edge="1" parent="1" source="dec_cooldown" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=1;html=1;strokeColor=#64748b;strokeWidth=1.5;strokeDasharray=3 3;fontColor=#475569;fontSize=10;" target="act_normal" value="ACTIVE&#xa;(Suppress flapping)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="670" />
+              <mxPoint x="430" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Congestion = NO -->
+        <mxCell id="e_cong_no" edge="1" parent="1" source="dec_congestion" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;fontColor=#059669;fontSize=11;fontStyle=1;" target="act_normal" value="NO&#xa;(Nominal Load)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Actions converge to Step 5 -->
+        <mxCell id="e_act_fail_to_step5" edge="1" parent="1" source="act_failover" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#b91c1c;strokeWidth=1.5;" target="node_step5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="905" y="800" />
+              <mxPoint x="650" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_act_qos_to_step5" edge="1" parent="1" source="act_qos" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#ca8a04;strokeWidth=1.5;" target="node_step5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="225" y="820" />
+              <mxPoint x="450" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_act_norm_to_step5" edge="1" parent="1" source="act_normal" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16a34a;strokeWidth=1.5;" target="node_step5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Feedback Loop Back to Top -->
+        <mxCell id="e_loop_back" edge="1" parent="1" source="node_step5" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=1;html=1;strokeColor=#6366f1;strokeWidth=3;strokeDasharray=4 4;fontColor=#4338ca;fontSize=11;fontStyle=1;align=center;" target="node_step1" value="Continuous Closed-Loop Decision Cycle (Repeats every 5.0 seconds)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="50" y="890" />
+              <mxPoint x="50" y="225" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
