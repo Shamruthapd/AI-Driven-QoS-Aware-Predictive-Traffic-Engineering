@@ -64,11 +64,12 @@ class FatTreeEdgeTopo(Topo):
         self.addLink(h4, s2, cls=TCLink, bw=10)
 
         # 4. Switch-to-switch links (100 Mbps)
-        self.addLink(s1, s3, cls=TCLink, bw=100)
-        self.addLink(s2, s3, cls=TCLink, bw=100)
+        # Primary inter-switch links via s3
+        self.addLink(s1, s3, cls=TCLink, bw=100)  # s1-eth3 <-> s3-eth1
+        self.addLink(s2, s3, cls=TCLink, bw=100)  # s2-eth3 <-> s3-eth2
 
-        # The redundant s1-s2 link is temporarily removed
-        # to avoid a Layer-2 loop during connectivity testing.
+        # 5. Redundant direct inter-switch link (100 Mbps) for Fast-Failover & Self-Healing
+        self.addLink(s1, s2, cls=TCLink, bw=100)  # s1-eth4 <-> s2-eth4
 
 
 if __name__ == '__main__':
