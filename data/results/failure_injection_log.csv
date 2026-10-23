@@ -1,0 +1,4 @@
+timestamp_iso,timestamp_epoch,interface,event_type,details
+2026-10-23T10:13:07.810272+00:00,1792750387.810379,s1-eth3,LINK_DOWN_SCHEDULED,Duration: 8.0s - Cycle 1/1
+2026-10-23T10:13:07.850608+00:00,1792750387.850640,s1-eth3,LINK_DOWN,Cycle 1/1
+2026-10-23T10:13:15.885153+00:00,1792750395.885180,s1-eth3,LINK_UP,Recovered after 8.0s - Cycle 1/1

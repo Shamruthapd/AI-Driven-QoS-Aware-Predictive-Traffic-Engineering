@@ -1,91 +1,95 @@
-source_file,mode,scenario,trial_id,flow_type,valid,invalid_reason,throughput_mbps,jitter_ms,packet_loss_pct,duration_seconds
-data/results/week11_raw/trial_s2_001_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_001_baseline_shortest_path_S2_iperf,bulk_tcp,True,,4.166200456492953,14.8,19.58,45.0
-data/results/week11_raw/trial_s2_001_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_001_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_002_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_002_baseline_shortest_path_S2_iperf,bulk_tcp,True,,3.685130454620452,16.63,20.73,45.0
-data/results/week11_raw/trial_s2_002_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_002_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_003_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_003_baseline_shortest_path_S2_iperf,bulk_tcp,True,,4.174884805878967,14.63,21.08,45.0
-data/results/week11_raw/trial_s2_003_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_003_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_004_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_004_baseline_shortest_path_S2_iperf,bulk_tcp,True,,3.897589557801893,14.4,19.81,45.0
-data/results/week11_raw/trial_s2_004_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_004_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_005_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_005_baseline_shortest_path_S2_iperf,bulk_tcp,True,,3.9305031507493555,11.21,18.82,45.0
-data/results/week11_raw/trial_s2_005_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_005_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_006_reactive_S2_iperf.json,reactive,S2,trial_s2_006_reactive_S2_iperf,bulk_tcp,True,,6.413856881316899,6.0,5.06,45.0
-data/results/week11_raw/trial_s2_006_reactive_S2_ping.log,reactive,S2,trial_s2_006_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_007_reactive_S2_iperf.json,reactive,S2,trial_s2_007_reactive_S2_iperf,bulk_tcp,True,,7.230319829788941,7.28,4.42,45.0
-data/results/week11_raw/trial_s2_007_reactive_S2_ping.log,reactive,S2,trial_s2_007_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_008_reactive_S2_iperf.json,reactive,S2,trial_s2_008_reactive_S2_iperf,bulk_tcp,True,,6.936373882362108,6.03,4.11,45.0
-data/results/week11_raw/trial_s2_008_reactive_S2_ping.log,reactive,S2,trial_s2_008_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_009_reactive_S2_iperf.json,reactive,S2,trial_s2_009_reactive_S2_iperf,bulk_tcp,True,,6.153828931802319,6.17,4.47,45.0
-data/results/week11_raw/trial_s2_009_reactive_S2_ping.log,reactive,S2,trial_s2_009_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_010_reactive_S2_iperf.json,reactive,S2,trial_s2_010_reactive_S2_iperf,bulk_tcp,True,,7.014888920810806,6.51,4.01,45.0
-data/results/week11_raw/trial_s2_010_reactive_S2_ping.log,reactive,S2,trial_s2_010_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_011_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_011_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,9.500395114430454,1.21,0.08,45.0
-data/results/week11_raw/trial_s2_011_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_011_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_012_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_012_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,9.33343133435766,1.38,0.14,45.0
-data/results/week11_raw/trial_s2_012_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_012_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_013_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_013_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,9.484153747594984,0.84,0.08,45.0
-data/results/week11_raw/trial_s2_013_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_013_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_014_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_014_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,9.34684973328925,0.93,0.07,45.0
-data/results/week11_raw/trial_s2_014_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_014_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s2_015_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_015_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,9.202341881872721,1.36,0.04,45.0
-data/results/week11_raw/trial_s2_015_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_015_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
-data/results/week11_raw/trial_s3_001_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_001_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.755770719383154,8.587537643279335,10.67,45.0
-data/results/week11_raw/trial_s3_001_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_001_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_002_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_002_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.610011727347648,9.28123758352088,10.67,45.0
-data/results/week11_raw/trial_s3_002_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_002_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_003_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_003_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.794588485665606,10.86844820598019,10.67,45.0
-data/results/week11_raw/trial_s3_003_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_003_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_004_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_004_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.856871827081939,8.804285914202957,10.67,45.0
-data/results/week11_raw/trial_s3_004_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_004_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_005_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_005_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.668768727874109,8.604290268033246,10.67,45.0
-data/results/week11_raw/trial_s3_005_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_005_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_006_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_006_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.5874551899214415,10.26874350836177,10.67,45.0
-data/results/week11_raw/trial_s3_006_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_006_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_007_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_007_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.510614387873545,9.19593177740327,10.67,45.0
-data/results/week11_raw/trial_s3_007_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_007_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_008_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_008_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.75995377511181,10.407295182111259,10.67,45.0
-data/results/week11_raw/trial_s3_008_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_008_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_009_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_009_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.5881762488162785,10.56242989356568,10.67,45.0
-data/results/week11_raw/trial_s3_009_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_009_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_010_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_010_baseline_shortest_path_S3_iperf,bulk_tcp,True,,4.823772182671131,8.522745658873214,10.67,45.0
-data/results/week11_raw/trial_s3_010_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_010_baseline_shortest_path_S3_ping,bulk_tcp,True,,,,17.8,
-data/results/week11_raw/trial_s3_011_reactive_S3_iperf.json,reactive,S3,trial_s3_011_reactive_S3_iperf,bulk_tcp,True,,6.970125258258996,4.388698749529454,2.19,45.0
-data/results/week11_raw/trial_s3_011_reactive_S3_ping.log,reactive,S3,trial_s3_011_reactive_S3_ping,bulk_tcp,True,,,,3.6,
-data/results/week11_raw/trial_s3_012_reactive_S3_iperf.json,reactive,S3,trial_s3_012_reactive_S3_iperf,bulk_tcp,True,,6.846372921690074,4.24179094208366,2.11,45.0
-data/results/week11_raw/trial_s3_012_reactive_S3_ping.log,reactive,S3,trial_s3_012_reactive_S3_ping,bulk_tcp,True,,,,3.5,
-data/results/week11_raw/trial_s3_013_reactive_S3_iperf.json,reactive,S3,trial_s3_013_reactive_S3_iperf,bulk_tcp,True,,7.20356413663719,5.824329466734545,2.16,45.0
-data/results/week11_raw/trial_s3_013_reactive_S3_ping.log,reactive,S3,trial_s3_013_reactive_S3_ping,bulk_tcp,True,,,,3.6,
-data/results/week11_raw/trial_s3_014_reactive_S3_iperf.json,reactive,S3,trial_s3_014_reactive_S3_iperf,bulk_tcp,True,,6.989267188604177,5.3801015781830674,2.27,45.0
-data/results/week11_raw/trial_s3_014_reactive_S3_ping.log,reactive,S3,trial_s3_014_reactive_S3_ping,bulk_tcp,True,,,,3.8,
-data/results/week11_raw/trial_s3_015_reactive_S3_iperf.json,reactive,S3,trial_s3_015_reactive_S3_iperf,bulk_tcp,True,,7.230853450155388,5.443380363141905,2.15,45.0
-data/results/week11_raw/trial_s3_015_reactive_S3_ping.log,reactive,S3,trial_s3_015_reactive_S3_ping,bulk_tcp,True,,,,3.6,
-data/results/week11_raw/trial_s3_016_reactive_S3_iperf.json,reactive,S3,trial_s3_016_reactive_S3_iperf,bulk_tcp,True,,6.9139491378257745,4.723469909005268,1.99,45.0
-data/results/week11_raw/trial_s3_016_reactive_S3_ping.log,reactive,S3,trial_s3_016_reactive_S3_ping,bulk_tcp,True,,,,3.3,
-data/results/week11_raw/trial_s3_017_reactive_S3_iperf.json,reactive,S3,trial_s3_017_reactive_S3_iperf,bulk_tcp,True,,6.850500714704864,4.69493400777523,1.8,45.0
-data/results/week11_raw/trial_s3_017_reactive_S3_ping.log,reactive,S3,trial_s3_017_reactive_S3_ping,bulk_tcp,True,,,,3.0,
-data/results/week11_raw/trial_s3_018_reactive_S3_iperf.json,reactive,S3,trial_s3_018_reactive_S3_iperf,bulk_tcp,True,,6.985090483558441,4.523767576928719,1.99,45.0
-data/results/week11_raw/trial_s3_018_reactive_S3_ping.log,reactive,S3,trial_s3_018_reactive_S3_ping,bulk_tcp,True,,,,3.3,
-data/results/week11_raw/trial_s3_019_reactive_S3_iperf.json,reactive,S3,trial_s3_019_reactive_S3_iperf,bulk_tcp,True,,6.885569324099048,5.822816994875873,2.03,45.0
-data/results/week11_raw/trial_s3_019_reactive_S3_ping.log,reactive,S3,trial_s3_019_reactive_S3_ping,bulk_tcp,True,,,,3.4,
-data/results/week11_raw/trial_s3_020_reactive_S3_iperf.json,reactive,S3,trial_s3_020_reactive_S3_iperf,bulk_tcp,True,,7.2947616753182976,5.599999399635232,1.8,45.0
-data/results/week11_raw/trial_s3_020_reactive_S3_ping.log,reactive,S3,trial_s3_020_reactive_S3_ping,bulk_tcp,True,,,,3.0,
-data/results/week11_raw/trial_s3_021_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_021_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,8.137140768075923,1.6431999380823714,0.05,45.0
-data/results/week11_raw/trial_s3_021_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_021_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
-data/results/week11_raw/trial_s3_022_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_022_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,7.884393137434531,1.760036800034538,0.05,45.0
-data/results/week11_raw/trial_s3_022_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_022_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
-data/results/week11_raw/trial_s3_023_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_023_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,8.062175466117951,1.376942330742465,0.05,45.0
-data/results/week11_raw/trial_s3_023_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_023_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
-data/results/week11_raw/trial_s3_024_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_024_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,7.9059520665992205,1.2726392553857884,0.07,45.0
-data/results/week11_raw/trial_s3_024_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_024_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
-data/results/week11_raw/trial_s3_025_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_025_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,8.033834396089416,1.728476018521734,0.05,45.0
-data/results/week11_raw/trial_s3_025_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_025_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
-data/results/week11_raw/trial_s3_026_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_026_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,8.199015042598043,1.4566684055735253,0.05,45.0
-data/results/week11_raw/trial_s3_026_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_026_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
-data/results/week11_raw/trial_s3_027_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_027_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,8.116831745745184,1.3955119767597788,0.05,45.0
-data/results/week11_raw/trial_s3_027_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_027_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
-data/results/week11_raw/trial_s3_028_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_028_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,8.198448552096037,1.470380041569396,0.05,45.0
-data/results/week11_raw/trial_s3_028_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_028_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
-data/results/week11_raw/trial_s3_029_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_029_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,7.906730075981017,1.5486732590058656,0.05,45.0
-data/results/week11_raw/trial_s3_029_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_029_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
-data/results/week11_raw/trial_s3_030_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_030_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,7.981489482531682,1.767671149264756,0.05,45.0
-data/results/week11_raw/trial_s3_030_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_030_full_ai_qos_ff_S3_ping,bulk_tcp,True,,,,0.1,
+source_file,mode,scenario,trial_id,flow_type,valid,invalid_reason,packet_loss_pct,throughput_mbps,jitter_ms,duration_seconds
+data\results\week11_raw\trial_001_full_ai_qos_ff_S1_steady_flow_bulk_tcp.json,full_ai_qos_ff,S1,trial_001,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_001_full_ai_qos_ff_S1_steady_flow_iot_sensor.log,full_ai_qos_ff,S1,trial_001,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_001_full_ai_qos_ff_S1_steady_flow_priority_udp.json,full_ai_qos_ff,S1,trial_001,priority_udp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_001_full_ai_qos_ff_S1_steady_ping.log,full_ai_qos_ff,S1,trial_001,bulk_tcp,True,,100.0,,,
+data\results\week11_raw\trial_s2_001_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_001_baseline_shortest_path_S2_iperf,bulk_tcp,True,,19.58,4.166200456492953,14.8,45.0
+data\results\week11_raw\trial_s2_001_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_001_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_002_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_002_baseline_shortest_path_S2_iperf,bulk_tcp,True,,20.73,3.685130454620452,16.63,45.0
+data\results\week11_raw\trial_s2_002_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_002_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_003_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_003_baseline_shortest_path_S2_iperf,bulk_tcp,True,,21.08,4.174884805878967,14.63,45.0
+data\results\week11_raw\trial_s2_003_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_003_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_004_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_004_baseline_shortest_path_S2_iperf,bulk_tcp,True,,19.81,3.897589557801893,14.4,45.0
+data\results\week11_raw\trial_s2_004_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_004_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_005_baseline_shortest_path_S2_iperf.json,baseline_shortest_path,S2,trial_s2_005_baseline_shortest_path_S2_iperf,bulk_tcp,True,,18.82,3.9305031507493555,11.21,45.0
+data\results\week11_raw\trial_s2_005_baseline_shortest_path_S2_ping.log,baseline_shortest_path,S2,trial_s2_005_baseline_shortest_path_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_006_reactive_S2_iperf.json,reactive,S2,trial_s2_006_reactive_S2_iperf,bulk_tcp,True,,5.06,6.413856881316899,6.0,45.0
+data\results\week11_raw\trial_s2_006_reactive_S2_ping.log,reactive,S2,trial_s2_006_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_007_reactive_S2_iperf.json,reactive,S2,trial_s2_007_reactive_S2_iperf,bulk_tcp,True,,4.42,7.230319829788941,7.28,45.0
+data\results\week11_raw\trial_s2_007_reactive_S2_ping.log,reactive,S2,trial_s2_007_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_008_reactive_S2_iperf.json,reactive,S2,trial_s2_008_reactive_S2_iperf,bulk_tcp,True,,4.11,6.936373882362108,6.03,45.0
+data\results\week11_raw\trial_s2_008_reactive_S2_ping.log,reactive,S2,trial_s2_008_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_009_reactive_S2_iperf.json,reactive,S2,trial_s2_009_reactive_S2_iperf,bulk_tcp,True,,4.47,6.153828931802319,6.17,45.0
+data\results\week11_raw\trial_s2_009_reactive_S2_ping.log,reactive,S2,trial_s2_009_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_010_reactive_S2_iperf.json,reactive,S2,trial_s2_010_reactive_S2_iperf,bulk_tcp,True,,4.01,7.014888920810806,6.51,45.0
+data\results\week11_raw\trial_s2_010_reactive_S2_ping.log,reactive,S2,trial_s2_010_reactive_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_011_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_011_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,0.08,9.500395114430454,1.21,45.0
+data\results\week11_raw\trial_s2_011_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_011_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_012_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_012_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,0.14,9.33343133435766,1.38,45.0
+data\results\week11_raw\trial_s2_012_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_012_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_013_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_013_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,0.08,9.484153747594984,0.84,45.0
+data\results\week11_raw\trial_s2_013_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_013_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_014_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_014_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,0.07,9.34684973328925,0.93,45.0
+data\results\week11_raw\trial_s2_014_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_014_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s2_015_full_ai_qos_ff_S2_iperf.json,full_ai_qos_ff,S2,trial_s2_015_full_ai_qos_ff_S2_iperf,bulk_tcp,True,,0.04,9.202341881872721,1.36,45.0
+data\results\week11_raw\trial_s2_015_full_ai_qos_ff_S2_ping.log,full_ai_qos_ff,S2,trial_s2_015_full_ai_qos_ff_S2_ping,bulk_tcp,False,no supported metrics parsed,,,,
+data\results\week11_raw\trial_s3_001_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_001_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.755770719383154,8.587537643279335,45.0
+data\results\week11_raw\trial_s3_001_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_001_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_002_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_002_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.610011727347648,9.28123758352088,45.0
+data\results\week11_raw\trial_s3_002_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_002_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_003_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_003_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.794588485665606,10.86844820598019,45.0
+data\results\week11_raw\trial_s3_003_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_003_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_004_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_004_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.856871827081939,8.804285914202957,45.0
+data\results\week11_raw\trial_s3_004_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_004_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_005_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_005_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.668768727874109,8.604290268033246,45.0
+data\results\week11_raw\trial_s3_005_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_005_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_006_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_006_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.5874551899214415,10.26874350836177,45.0
+data\results\week11_raw\trial_s3_006_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_006_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_007_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_007_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.510614387873545,9.19593177740327,45.0
+data\results\week11_raw\trial_s3_007_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_007_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_008_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_008_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.75995377511181,10.407295182111259,45.0
+data\results\week11_raw\trial_s3_008_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_008_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_009_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_009_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.5881762488162785,10.56242989356568,45.0
+data\results\week11_raw\trial_s3_009_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_009_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_010_baseline_shortest_path_S3_iperf.json,baseline_shortest_path,S3,trial_s3_010_baseline_shortest_path_S3_iperf,bulk_tcp,True,,10.67,4.823772182671131,8.522745658873214,45.0
+data\results\week11_raw\trial_s3_010_baseline_shortest_path_S3_ping.log,baseline_shortest_path,S3,trial_s3_010_baseline_shortest_path_S3_ping,bulk_tcp,True,,17.8,,,
+data\results\week11_raw\trial_s3_011_reactive_S3_iperf.json,reactive,S3,trial_s3_011_reactive_S3_iperf,bulk_tcp,True,,2.19,6.970125258258996,4.388698749529454,45.0
+data\results\week11_raw\trial_s3_011_reactive_S3_ping.log,reactive,S3,trial_s3_011_reactive_S3_ping,bulk_tcp,True,,3.6,,,
+data\results\week11_raw\trial_s3_012_reactive_S3_iperf.json,reactive,S3,trial_s3_012_reactive_S3_iperf,bulk_tcp,True,,2.11,6.846372921690074,4.24179094208366,45.0
+data\results\week11_raw\trial_s3_012_reactive_S3_ping.log,reactive,S3,trial_s3_012_reactive_S3_ping,bulk_tcp,True,,3.5,,,
+data\results\week11_raw\trial_s3_013_reactive_S3_iperf.json,reactive,S3,trial_s3_013_reactive_S3_iperf,bulk_tcp,True,,2.16,7.20356413663719,5.824329466734545,45.0
+data\results\week11_raw\trial_s3_013_reactive_S3_ping.log,reactive,S3,trial_s3_013_reactive_S3_ping,bulk_tcp,True,,3.6,,,
+data\results\week11_raw\trial_s3_014_reactive_S3_iperf.json,reactive,S3,trial_s3_014_reactive_S3_iperf,bulk_tcp,True,,2.27,6.989267188604177,5.3801015781830674,45.0
+data\results\week11_raw\trial_s3_014_reactive_S3_ping.log,reactive,S3,trial_s3_014_reactive_S3_ping,bulk_tcp,True,,3.8,,,
+data\results\week11_raw\trial_s3_015_reactive_S3_iperf.json,reactive,S3,trial_s3_015_reactive_S3_iperf,bulk_tcp,True,,2.15,7.230853450155388,5.443380363141905,45.0
+data\results\week11_raw\trial_s3_015_reactive_S3_ping.log,reactive,S3,trial_s3_015_reactive_S3_ping,bulk_tcp,True,,3.6,,,
+data\results\week11_raw\trial_s3_016_reactive_S3_iperf.json,reactive,S3,trial_s3_016_reactive_S3_iperf,bulk_tcp,True,,1.99,6.9139491378257745,4.723469909005268,45.0
+data\results\week11_raw\trial_s3_016_reactive_S3_ping.log,reactive,S3,trial_s3_016_reactive_S3_ping,bulk_tcp,True,,3.3,,,
+data\results\week11_raw\trial_s3_017_reactive_S3_iperf.json,reactive,S3,trial_s3_017_reactive_S3_iperf,bulk_tcp,True,,1.8,6.850500714704864,4.69493400777523,45.0
+data\results\week11_raw\trial_s3_017_reactive_S3_ping.log,reactive,S3,trial_s3_017_reactive_S3_ping,bulk_tcp,True,,3.0,,,
+data\results\week11_raw\trial_s3_018_reactive_S3_iperf.json,reactive,S3,trial_s3_018_reactive_S3_iperf,bulk_tcp,True,,1.99,6.985090483558441,4.523767576928719,45.0
+data\results\week11_raw\trial_s3_018_reactive_S3_ping.log,reactive,S3,trial_s3_018_reactive_S3_ping,bulk_tcp,True,,3.3,,,
+data\results\week11_raw\trial_s3_019_reactive_S3_iperf.json,reactive,S3,trial_s3_019_reactive_S3_iperf,bulk_tcp,True,,2.03,6.885569324099048,5.822816994875873,45.0
+data\results\week11_raw\trial_s3_019_reactive_S3_ping.log,reactive,S3,trial_s3_019_reactive_S3_ping,bulk_tcp,True,,3.4,,,
+data\results\week11_raw\trial_s3_020_reactive_S3_iperf.json,reactive,S3,trial_s3_020_reactive_S3_iperf,bulk_tcp,True,,1.8,7.2947616753182976,5.599999399635232,45.0
+data\results\week11_raw\trial_s3_020_reactive_S3_ping.log,reactive,S3,trial_s3_020_reactive_S3_ping,bulk_tcp,True,,3.0,,,
+data\results\week11_raw\trial_s3_021_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_021_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.05,8.137140768075923,1.6431999380823714,45.0
+data\results\week11_raw\trial_s3_021_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_021_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
+data\results\week11_raw\trial_s3_022_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_022_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.05,7.884393137434531,1.760036800034538,45.0
+data\results\week11_raw\trial_s3_022_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_022_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
+data\results\week11_raw\trial_s3_023_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_023_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.05,8.062175466117951,1.376942330742465,45.0
+data\results\week11_raw\trial_s3_023_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_023_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
+data\results\week11_raw\trial_s3_024_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_024_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.07,7.9059520665992205,1.2726392553857884,45.0
+data\results\week11_raw\trial_s3_024_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_024_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
+data\results\week11_raw\trial_s3_025_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_025_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.05,8.033834396089416,1.728476018521734,45.0
+data\results\week11_raw\trial_s3_025_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_025_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
+data\results\week11_raw\trial_s3_026_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_026_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.05,8.199015042598043,1.4566684055735253,45.0
+data\results\week11_raw\trial_s3_026_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_026_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
+data\results\week11_raw\trial_s3_027_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_027_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.05,8.116831745745184,1.3955119767597788,45.0
+data\results\week11_raw\trial_s3_027_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_027_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
+data\results\week11_raw\trial_s3_028_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_028_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.05,8.198448552096037,1.470380041569396,45.0
+data\results\week11_raw\trial_s3_028_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_028_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
+data\results\week11_raw\trial_s3_029_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_029_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.05,7.906730075981017,1.5486732590058656,45.0
+data\results\week11_raw\trial_s3_029_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_029_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
+data\results\week11_raw\trial_s3_030_full_ai_qos_ff_S3_iperf.json,full_ai_qos_ff,S3,trial_s3_030_full_ai_qos_ff_S3_iperf,bulk_tcp,True,,0.05,7.981489482531682,1.767671149264756,45.0
+data\results\week11_raw\trial_s3_030_full_ai_qos_ff_S3_ping.log,full_ai_qos_ff,S3,trial_s3_030_full_ai_qos_ff_S3_ping,bulk_tcp,True,,0.1,,,
