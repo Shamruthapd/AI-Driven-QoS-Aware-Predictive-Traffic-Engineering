@@ -1,0 +1,6 @@
+trial_id,mode,timestamp_iso,timestamp_epoch,event_type,details
+trial_s3_016,reactive,2026-10-23T09:16:00+00:00,1792746960.000000,TRIAL_START,Scenario S3 started in mode reactive
+trial_s3_016,reactive,2026-10-23T09:16:15+00:00,1792746975.000000,PORT_DOWN,Interface s1-eth3 link down event detected
+trial_s3_016,reactive,2026-10-23T09:16:16.490458+00:00,1792746976.490458,ENFORCEMENT_FLOW_MOD,Reactive alternate route flow-mods pushed to s1/s2 in 1490.5ms
+trial_s3_016,reactive,2026-10-23T09:16:23+00:00,1792746983.000000,PORT_UP,Interface s1-eth3 link restored (failback phase)
+trial_s3_016,reactive,2026-10-23T09:16:45+00:00,1792747005.000000,TRIAL_END,Scenario S3 completed successfully

@@ -1,0 +1,162 @@
+timestamp_iso,timestamp_epoch,event_type,dpid,port,trial_id,mode,details
+2026-10-23T09:16:31.255717+00:00,1792746991.257718,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:16:31.269310+00:00,1792746991.270406,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:16:31.281140+00:00,1792746991.281723,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:16:31.292810+00:00,1792746991.293397,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:16:31.304494+00:00,1792746991.305085,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:16:31.316780+00:00,1792746991.317376,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:16:31.327942+00:00,1792746991.329960,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:16:31.340561+00:00,1792746991.341073,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:16:31.352383+00:00,1792746991.353479,decision,1,3,trial_self_healing,full_ai_qos_ff,"Action=PROACTIVE_REROUTE_BULK | Route=BACKUP | Reason=Congestion predicted (util=-0.11, anomaly=True)"
+2026-10-23T09:16:31.352383+00:00,1792746991.354407,enforcement,1,3,trial_self_healing,full_ai_qos_ff,"Action=PROACTIVE_REROUTE_BULK | Route=BACKUP | Reason=Congestion predicted (util=-0.11, anomaly=True)"
+2026-10-23T09:16:31.365390+00:00,1792746991.365982,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (15.0s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.377668+00:00,1792746991.379692,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (15.0s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.390326+00:00,1792746991.390912,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (15.0s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.401596+00:00,1792746991.401596,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (15.0s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.413161+00:00,1792746991.413162,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.424412+00:00,1792746991.425503,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.436097+00:00,1792746991.437191,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.448114+00:00,1792746991.448625,decision,2,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.459565+00:00,1792746991.460072,decision,2,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.470848+00:00,1792746991.471356,decision,2,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.482438+00:00,1792746991.482439,decision,2,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.494137+00:00,1792746991.495157,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.506831+00:00,1792746991.507922,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.518429+00:00,1792746991.519024,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.530073+00:00,1792746991.530585,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.541312+00:00,1792746991.541904,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.552740+00:00,1792746991.553328,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.564341+00:00,1792746991.564931,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:16:31.575612+00:00,1792746991.575612,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:17:39.755668+00:00,1792747059.755668,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.767115+00:00,1792747059.767115,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.778284+00:00,1792747059.778861,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.789819+00:00,1792747059.789819,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.801386+00:00,1792747059.802406,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.812993+00:00,1792747059.813560,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.824708+00:00,1792747059.824708,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.836083+00:00,1792747059.837165,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.847632+00:00,1792747059.848694,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.859448+00:00,1792747059.860026,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.871113+00:00,1792747059.871685,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.883012+00:00,1792747059.883013,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.894641+00:00,1792747059.895667,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.906389+00:00,1792747059.906934,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.918007+00:00,1792747059.918007,decision,1,1,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.929552+00:00,1792747059.930067,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.940977+00:00,1792747059.941552,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.952764+00:00,1792747059.953832,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.964541+00:00,1792747059.965056,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.975928+00:00,1792747059.976439,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.987313+00:00,1792747059.987314,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:39.999511+00:00,1792747060.000023,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.011557+00:00,1792747060.012575,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.023084+00:00,1792747060.024099,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.034906+00:00,1792747060.035418,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.046288+00:00,1792747060.046289,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.058385+00:00,1792747060.058896,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.070218+00:00,1792747060.070731,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.082364+00:00,1792747060.083471,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.094259+00:00,1792747060.094774,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.106154+00:00,1792747060.106154,decision,1,2,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.118341+00:00,1792747060.118911,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.130430+00:00,1792747060.131509,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.142883+00:00,1792747060.143900,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.154785+00:00,1792747060.155802,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:17:40.167025+00:00,1792747060.167539,decision,1,3,trial_self_healing,full_ai_qos_ff,"Action=PROACTIVE_REROUTE_BULK | Route=BACKUP | Reason=Congestion predicted (util=0.03, anomaly=True)"
+2026-10-23T09:17:40.167025+00:00,1792747060.168555,enforcement,1,3,trial_self_healing,full_ai_qos_ff,"Action=PROACTIVE_REROUTE_BULK | Route=BACKUP | Reason=Congestion predicted (util=0.03, anomaly=True)"
+2026-10-23T09:17:40.180128+00:00,1792747060.181197,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (15.0s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.191905+00:00,1792747060.192923,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (15.0s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.203770+00:00,1792747060.203770,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (15.0s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.215610+00:00,1792747060.216171,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (15.0s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.226898+00:00,1792747060.226898,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.238636+00:00,1792747060.238636,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.250326+00:00,1792747060.250326,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.262274+00:00,1792747060.263297,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.274241+00:00,1792747060.274759,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.285520+00:00,1792747060.287539,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.299082+00:00,1792747060.300358,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.311403+00:00,1792747060.311920,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.9s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.323456+00:00,1792747060.324569,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.335367+00:00,1792747060.335367,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.347223+00:00,1792747060.348314,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.358932+00:00,1792747060.358932,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.370458+00:00,1792747060.371476,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.382279+00:00,1792747060.382798,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.394432+00:00,1792747060.395448,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.405958+00:00,1792747060.406975,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.8s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.417951+00:00,1792747060.418544,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.7s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.429611+00:00,1792747060.429611,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.7s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.440858+00:00,1792747060.441370,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.7s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.452749+00:00,1792747060.453832,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.7s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.464403+00:00,1792747060.464403,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.7s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.475928+00:00,1792747060.475929,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.7s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.487309+00:00,1792747060.487309,decision,1,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.7s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.498970+00:00,1792747060.500496,decision,2,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.7s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.511208+00:00,1792747060.511209,decision,2,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.7s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.522942+00:00,1792747060.524045,decision,2,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.6s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.535038+00:00,1792747060.535549,decision,2,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.6s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.546786+00:00,1792747060.547809,decision,2,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.6s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.558784+00:00,1792747060.559377,decision,2,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.6s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.570562+00:00,1792747060.571157,decision,2,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.6s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.582364+00:00,1792747060.582365,decision,2,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.6s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.593948+00:00,1792747060.595049,decision,2,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.6s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.605511+00:00,1792747060.605512,decision,2,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.6s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.617661+00:00,1792747060.618759,decision,2,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.5s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.629655+00:00,1792747060.630249,decision,2,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.5s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.641665+00:00,1792747060.642257,decision,2,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.5s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.653612+00:00,1792747060.654706,decision,2,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.5s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.665399+00:00,1792747060.665999,decision,2,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.5s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.677671+00:00,1792747060.677671,decision,2,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.5s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.689356+00:00,1792747060.690455,decision,2,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.5s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.701090+00:00,1792747060.702391,decision,2,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.5s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.713150+00:00,1792747060.713150,decision,2,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.5s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.724758+00:00,1792747060.724759,decision,2,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.4s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.735768+00:00,1792747060.736278,decision,2,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.4s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.747478+00:00,1792747060.748501,decision,2,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.4s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.759167+00:00,1792747060.759167,decision,2,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.4s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.771402+00:00,1792747060.772421,decision,2,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.4s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.783178+00:00,1792747060.783690,decision,2,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.4s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.794350+00:00,1792747060.794858,decision,2,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.4s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.805384+00:00,1792747060.806401,decision,2,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.4s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.816898+00:00,1792747060.816899,decision,2,4,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.4s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.828657+00:00,1792747060.829747,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.3s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.840351+00:00,1792747060.841370,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.3s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.852542+00:00,1792747060.852542,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.3s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.864079+00:00,1792747060.865094,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.3s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.876094+00:00,1792747060.876613,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.3s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.887690+00:00,1792747060.888210,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.3s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.899213+00:00,1792747060.900235,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.3s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.910894+00:00,1792747060.911403,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.3s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.922000+00:00,1792747060.922000,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.2s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.933777+00:00,1792747060.933777,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.2s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.945312+00:00,1792747060.946340,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.2s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.957084+00:00,1792747060.958138,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.2s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.969034+00:00,1792747060.969034,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.2s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.980675+00:00,1792747060.981192,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.2s remaining). Suppressing oscillation.
+2026-10-23T09:17:40.992186+00:00,1792747060.993204,decision,3,1,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.2s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.003951+00:00,1792747061.004470,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.2s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.015371+00:00,1792747061.015889,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.2s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.026684+00:00,1792747061.027202,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.1s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.038217+00:00,1792747061.038736,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.1s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.049939+00:00,1792747061.050450,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.1s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.061333+00:00,1792747061.061923,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.1s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.073619+00:00,1792747061.073620,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.1s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.085174+00:00,1792747061.085685,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.1s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.096814+00:00,1792747061.096814,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.1s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.108516+00:00,1792747061.109534,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.1s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.121088+00:00,1792747061.121794,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.0s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.132706+00:00,1792747061.133721,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.0s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.144781+00:00,1792747061.145384,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.0s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.156683+00:00,1792747061.156683,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.0s remaining). Suppressing oscillation.
+2026-10-23T09:17:41.168407+00:00,1792747061.169435,decision,3,2,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (14.0s remaining). Suppressing oscillation.
+2026-10-23T09:40:04.677354+00:00,1792748404.677354,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:40:04.678377+00:00,1792748404.678377,decision,1,3,trial_self_healing,full_ai_qos_ff,"Action=PROACTIVE_REROUTE_BULK | Route=BACKUP | Reason=Congestion predicted (util=0.90, anomaly=True)"
+2026-10-23T09:40:04.678377+00:00,1792748404.678931,enforcement,1,3,trial_self_healing,full_ai_qos_ff,"Action=PROACTIVE_REROUTE_BULK | Route=BACKUP | Reason=Congestion predicted (util=0.90, anomaly=True)"
+2026-10-23T09:40:04.678930+00:00,1792748404.679454,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (10.0s remaining). Suppressing oscillation.
+2026-10-23T09:40:04.679453+00:00,1792748404.679979,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=DEFER_TO_FAST_FAILOVER | Route=BACKUP | Reason=Physical link DOWN detected; Layer 1 Fast-Failover handles failover locally.
+2026-10-23T09:41:42.286389+00:00,1792748502.310600,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD | Route=PRIMARY | Reason=Normal conditions; no reroute needed.
+2026-10-23T09:41:42.318284+00:00,1792748502.335459,decision,1,3,trial_self_healing,full_ai_qos_ff,"Action=PROACTIVE_REROUTE_BULK | Route=BACKUP | Reason=Congestion predicted (util=0.90, anomaly=True)"
+2026-10-23T09:41:42.318284+00:00,1792748502.364307,enforcement,1,3,trial_self_healing,full_ai_qos_ff,"Action=PROACTIVE_REROUTE_BULK | Route=BACKUP | Reason=Congestion predicted (util=0.90, anomaly=True)"
+2026-10-23T09:41:42.369389+00:00,1792748502.389111,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=HOLD_COOLDOWN | Route=BACKUP | Reason=In stability cooldown (9.9s remaining). Suppressing oscillation.
+2026-10-23T09:41:42.394792+00:00,1792748502.422997,decision,1,3,trial_self_healing,full_ai_qos_ff,Action=DEFER_TO_FAST_FAILOVER | Route=BACKUP | Reason=Physical link DOWN detected; Layer 1 Fast-Failover handles failover locally.

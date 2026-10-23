@@ -1,0 +1,6 @@
+trial_id,mode,timestamp_iso,timestamp_epoch,event_type,details
+trial_s3_029,full_ai_qos_ff,2026-10-23T09:29:00+00:00,1792747740.000000,TRIAL_START,Scenario S3 started in mode full_ai_qos_ff
+trial_s3_029,full_ai_qos_ff,2026-10-23T09:29:15+00:00,1792747755.000000,PORT_DOWN,Interface s1-eth3 link down event detected
+trial_s3_029,full_ai_qos_ff,2026-10-23T09:29:15.043654+00:00,1792747755.043654,FF_USED,OVS group table 100 switched to bucket 1 (s1-eth4) locally in 43.7ms
+trial_s3_029,full_ai_qos_ff,2026-10-23T09:29:23+00:00,1792747763.000000,PORT_UP,Interface s1-eth3 link restored (failback phase)
+trial_s3_029,full_ai_qos_ff,2026-10-23T09:29:45+00:00,1792747785.000000,TRIAL_END,Scenario S3 completed successfully

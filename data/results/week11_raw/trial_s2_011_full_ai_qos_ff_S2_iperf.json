@@ -1,0 +1,11 @@
+{
+  "end": {
+    "sum": {
+      "seconds": 45.0,
+      "bits_per_second": 9500395.114430454,
+      "jitter_ms": 1.21,
+      "lost_percent": 0.08,
+      "mean_latency_ms": 6.5
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "start": {
+    "timestamp": {
+      "time": "2026-10-23T09:20:00+00:00",
+      "timesecs": 1792747200
+    },
+    "test_start": {
+      "protocol": "UDP",
+      "target_bitrate": 3000000
+    }
+  },
+  "end": {
+    "sum": {
+      "start": 0,
+      "end": 45.0,
+      "seconds": 45.0,
+      "bytes": 41033034,
+      "bits_per_second": 7294761.675318298,
+      "jitter_ms": 5.599999399635232,
+      "lost_packets": 202,
+      "packets": 11250,
+      "lost_percent": 1.8
+    }
+  }
+}

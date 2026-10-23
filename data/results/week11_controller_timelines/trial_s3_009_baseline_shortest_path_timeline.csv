@@ -1,0 +1,5 @@
+trial_id,mode,timestamp_iso,timestamp_epoch,event_type,details
+trial_s3_009,baseline_shortest_path,2026-10-23T09:09:00+00:00,1792746540.000000,TRIAL_START,Scenario S3 started in mode baseline_shortest_path
+trial_s3_009,baseline_shortest_path,2026-10-23T09:09:15+00:00,1792746555.000000,PORT_DOWN,Interface s1-eth3 link down event detected
+trial_s3_009,baseline_shortest_path,2026-10-23T09:09:23+00:00,1792746563.000000,PORT_UP,Interface s1-eth3 link restored (failback phase)
+trial_s3_009,baseline_shortest_path,2026-10-23T09:09:45+00:00,1792746585.000000,TRIAL_END,Scenario S3 completed successfully
